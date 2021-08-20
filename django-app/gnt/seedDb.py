@@ -1,13 +1,12 @@
 import pandas as pd
 import sqlite3
 
-conn = sqlite3.connect(
-    '/Users/stephen/Desktop/github/learn-nt-greek/django-app/db.sqlite3')
+conn = sqlite3.connect('../../django-app/db.sqlite3')
 
 
 def pkl_to_db(tableName, pklName, columns):
     df = pd.read_pickle(
-        f"/Users/stephen/Desktop/github/learn-nt-greek/django-app/gnt/Tyndale/pickles/{pklName}.pkl")
+        f"../gnt/Tyndale/pickles/{pklName}.pkl")
     df = df[columns]
     df.to_sql(tableName, conn, if_exists='replace', index=False)
     print(f"{tableName} done")

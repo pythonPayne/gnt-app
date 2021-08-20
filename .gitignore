@@ -1,0 +1,16 @@
+django-app/venv
+django-app/db.sqlite3
+django-app/gnt/Tyndale/OLD
+django-app/gnt/Tyndale/pickles/*
+django-app/gnt/Tyndale/notes.txt
+
+*.log
+*.pot
+*.pyc
+__pycache__/
+.DS_Store
+.vscode/
+
+gatsby-app/node_modules
+gatsby-app/.cache
+gatsby-app/public

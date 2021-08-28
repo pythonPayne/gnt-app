@@ -8,12 +8,18 @@ query($strongs: String!){
   DJANGO {
     allStrongs(strongs:$strongs){
     edges{
-      node{        
+      node{
+        strongs
+        lexicon
+        gloss
+        transliteration
+        frequency        
         word(bcv_Gte:"000000", bcv_Lte:"999999"){
           edges{
             node{              
               bcvIndex{
               book
+              bookLong
               chapter
               verse
               word{
@@ -58,11 +64,13 @@ const Word = (props) => {
   const [showStrongs, setShowStrongs] = useState(false)
   
   const data = props.data
+  const strongs = data && data.DJANGO.allStrongs.edges[0].node.strongs
+  const lexicon = data && data.DJANGO.allStrongs.edges[0].node.lexicon
+  const transliteration = data && data.DJANGO.allStrongs.edges[0].node.transliteration
+  const frequency = data && data.DJANGO.allStrongs.edges[0].node.frequency
+  const gloss = data && data.DJANGO.allStrongs.edges[0].node.gloss
   const verses = data && data.DJANGO.allStrongs.edges[0].node.word.edges
-  
-  console.log(props)
-  console.log(verses)
-
+    
   const showVerse = (words) => {    
     return (
       <div className={`flex flex-wrap`}>
@@ -73,17 +81,17 @@ const Word = (props) => {
           return (
             <div className={`flex flex-col border mr-4 mb-4 p-1 ${dark ? "border-gray-400" : "border-gray-400"} 
             ${strongs !== null && strongs.strongs ===  props.path.slice(6,) && "bg-yellow-200"}`}>              
-              <div key={i} className={`text-2xl tracking-wider p-1 rounded ${!showGreek && "hidden"}`}>
+              <div key={i} className={`text-lg tracking-wider p-1 rounded ${!showGreek && "hidden"}`}>
                 {word.node.greek}            
               </div>
               <div className={`p-1 text-medium ${!showEnglish && "hidden"}`}>
-              {word.node.english}            
+                {word.node.english}            
               </div>
               <div className={`p-1 text-sm ${!showMorphology && "hidden"}`}>
-              {morphology !== null && morphology.morphology}            
+                {morphology !== null && morphology.morphology}            
               </div>
               <div className={`p-1 text-xs ${!showStrongs && "hidden"}`}>
-              {strongs !== null && strongs.strongs}            
+                {strongs !== null && strongs.strongs}            
               </div>
             </div>
           )}
@@ -96,9 +104,9 @@ const Word = (props) => {
     <Layout>      
       <div>
       <>
-        <div className={`flex justify-center px-8 py-8 text-5xl`}>
-          {props.path.slice(6,)}
-        </div>                
+        <div className={`flex justify-center px-8 py-8 text-4xl`}>
+          {strongs + " - " + lexicon + " - " + transliteration + " - " + frequency + "x in NT" + ` - "${gloss}"`}
+        </div>                        
         <div className={`flex justify-center px-8 py-4`}>
             <button className={`w-32 mr-2 rounded-full focus:outline-none border-none ${showGreek ? "bg-red-200" : "bg-gray-100"}`} onClick={() => setShowGreek(!showGreek)}>greek</button>
             <button className={`w-32 mr-2 rounded-full focus:outline-none border-none ${showEnglish ? "bg-red-200" : "bg-gray-100"}`} onClick={() => setShowEnglish(!showEnglish)}>english</button>
@@ -108,7 +116,7 @@ const Word = (props) => {
         <div className={`flex flex-col justify-center pl-16 pr-8 py-8`}>
             {verses.map(verse => (
                 <div>
-                    <div className={`text-xl mb-4 font-bold`}>{verse.node.bcvIndex.book}. {verse.node.bcvIndex.chapter}:{verse.node.bcvIndex.verse}</div>
+                    <div className={`text-lg mb-4 font-bold`}>{verse.node.bcvIndex.bookLong} {verse.node.bcvIndex.chapter}:{verse.node.bcvIndex.verse}</div>
                     {showVerse(verse.node.bcvIndex.word.edges)}
                 </div>
                 ))

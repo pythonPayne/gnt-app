@@ -168,9 +168,9 @@ const Chapter = (props) => {
     <div className={`flex items-center`}>
       <div className={`mr-4 w-32`}>{name}</div>
       <div className={`w-8 h-8 ${setting ? "bg-green-500" : "bg-gray-200"}`} 
-      onClick={()=>setSetting(true)}></div>
+      onClick={()=>setSetting(!setting)}></div>
       <div className={`w-8 h-8 ${setting ? "bg-gray-200" : "bg-red-500"}`} 
-      onClick={()=>setSetting(false)}></div>
+      onClick={()=>setSetting(!setting)}></div>
     </div>
   )
 

@@ -14,7 +14,7 @@ const Layout = ({ children }) => {
     const menu = "M4 6h16M4 12h8m-8 6h16"
     
     return (
-        <div className={``}>
+        <div className={`min-h-screen`}>
             <div
                 className={`h-12 w-full px-2 text-xl flex justify-between items-center border-b
                 ${dark ? "bg-gray-900 text-white border-yellow-500" : "bg-gray-100 text-gray-900 border-gray-300"}`}>
@@ -34,7 +34,7 @@ const Layout = ({ children }) => {
                     <path strokeLinecap="round" strokeLinejoin="round" d={dark ? sun : moon} />                 
                 </svg>                
             </div>
-            <div className={``}>{children}</div>            
+            <div className={`h-full`}>{children}</div>            
         </div>
     )
 }

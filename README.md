@@ -7,7 +7,7 @@
     ```shell
     cd django-app
     # create python virtual environment
-    pip install requirements.txt
+    pip install -r requirements.txt
     cd scripts
     bash startOver.sh
     ```

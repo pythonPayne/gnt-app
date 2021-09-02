@@ -2,4 +2,4 @@
 rm -rf ../core/__pycache__
 rm -rf ../gnt/__pycache__
 rm -rf ../gnt/migrations
-rm ../db.sqlite3
+rm -f ../db.sqlite3

@@ -55,7 +55,7 @@ const Chapter = (props) => {
   const [showGreek, setShowGreek] = useState(true)
   const [showEnglish, setShowEnglish] = useState(true)
   const [showMorphology, setShowMorphology] = useState(false)
-  const [showStrongs, setShowStrongs] = useState(false)
+  const [showStrongs, setShowStrongs] = useState(true)
   const [showLexicon, setShowLexicon] = useState(false)
   const [showTransliteration, setShowTransliteration] = useState(false)
   const [showNestleAlandOnly, setShowNestleAlandOnly] = useState(true)

@@ -56,73 +56,47 @@ query($strongs: String!){
 `
 const Word = (props) => {
   const theme = useSelector((state) => state.layout.theme)    
+  const [bookSelected, setBookSelected] = useState('Jhn')
   const dark = theme === "dark"
-  
-  const [showGreek, setShowGreek] = useState(true)
-  const [showEnglish, setShowEnglish] = useState(false)
-  const [showMorphology, setShowMorphology] = useState(false)
-  const [showStrongs, setShowStrongs] = useState(false)
-  
   const data = props.data
-  const strongs = data && data.DJANGO.allStrongs.edges[0].node.strongs
-  const lexicon = data && data.DJANGO.allStrongs.edges[0].node.lexicon
-  const transliteration = data && data.DJANGO.allStrongs.edges[0].node.transliteration
-  const frequency = data && data.DJANGO.allStrongs.edges[0].node.frequency
-  const gloss = data && data.DJANGO.allStrongs.edges[0].node.gloss
-  const verses = data && data.DJANGO.allStrongs.edges[0].node.word.edges
-    
-  const showVerse = (words) => {    
-    return (
-      <div className={`flex flex-wrap`}>
-        {words.map((word,i) => {
-          const morphology = word.node.morphology
-          const strongs = word.node.strongs
-          if (morphology !== null && morphology.function !== "Punctuation") {
-          return (
-            <div className={`flex flex-col border mr-4 mb-4 p-1 ${dark ? "border-gray-400" : "border-gray-400"} 
-            ${strongs !== null && strongs.strongs ===  props.path.slice(6,) && "bg-yellow-200"}`}>              
-              <div key={i} className={`text-lg tracking-wider p-1 rounded ${!showGreek && "hidden"}`}>
-                {word.node.greek}            
-              </div>
-              <div className={`p-1 text-medium ${!showEnglish && "hidden"}`}>
-                {word.node.english}            
-              </div>
-              <div className={`p-1 text-sm ${!showMorphology && "hidden"}`}>
-                {morphology !== null && morphology.morphology}            
-              </div>
-              <div className={`p-1 text-xs ${!showStrongs && "hidden"}`}>
-                {strongs !== null && strongs.strongs}            
-              </div>
-            </div>
-          )}
-          })}
-      </div>  
-    )
-  }
+  const node = data && data.DJANGO.allStrongs.edges[0].node  
+  const lexicon = data && node.lexicon
+  const frequency = data && node.frequency
+  const verses = data && node.word.edges
+  const bookAbbrevs = ['Mat', 'Mrk', 'Luk', 'Jhn', 'Act', 'Rom',
+  '1Cor', '2Cor', 'Gal', 'Eph', 'Php', 'Col', '1Th', '2Th', '1Ti',
+  '2Ti', 'Tit', 'Phm', 'Heb', 'Jms', '1Pe', '2Pe', '1Jn', '2Jn', '3Jn',
+  'Jud', 'Rev']
+  const getCountForBook = (bookShort) => verses.filter(v => v.node.bcvIndex.book === bookShort).length
+  const countsPerBook = bookAbbrevs.map(b => ( {book: b, count: getCountForBook(b)} ))
+  const countMax = Math.max(...countsPerBook.map(b => b.count))  
 
+  const bookSelectedVerses = verses.filter(v => v.node.bcvIndex.book === bookSelected)
+  console.log(bookSelectedVerses)
   return (
     <Layout>      
-      <div>
-      <>
-        <div className={`flex justify-center px-8 py-8 text-4xl`}>
-          {strongs + " - " + lexicon + " - " + transliteration + " - " + frequency + "x in NT" + ` - "${gloss}"`}
-        </div>                        
-        <div className={`flex justify-center px-8 py-4`}>
-            <button className={`w-32 mr-2 rounded-full focus:outline-none border-none ${showGreek ? "bg-red-200" : "bg-gray-100"}`} onClick={() => setShowGreek(!showGreek)}>greek</button>
-            <button className={`w-32 mr-2 rounded-full focus:outline-none border-none ${showEnglish ? "bg-red-200" : "bg-gray-100"}`} onClick={() => setShowEnglish(!showEnglish)}>english</button>
-            <button className={`w-32 mr-2 rounded-full focus:outline-none border-none ${showMorphology ? "bg-red-200" : "bg-gray-100"}`} onClick={() => setShowMorphology(!showMorphology)}>morphology</button>
-            <button className={`w-32 mr-2 rounded-full focus:outline-none border-none ${showStrongs ? "bg-red-200" : "bg-gray-100"}`} onClick={() => setShowStrongs(!showStrongs)}>strongs</button>
-        </div>            
-        <div className={`flex flex-col justify-center pl-16 pr-8 py-8`}>
-            {verses.map(verse => (
-                <div>
-                    <div className={`text-lg mb-4 font-bold`}>{verse.node.bcvIndex.bookLong} {verse.node.bcvIndex.chapter}:{verse.node.bcvIndex.verse}</div>
-                    {showVerse(verse.node.bcvIndex.word.edges)}
-                </div>
-                ))
-            }
+      <div className={`${dark ? "bg-gray-500 bg-opacity-80" : "bg-white"} min-h-screen`}>
+        <div className={`flex justify-center px-8 py-2 text-2xl sticky top-0 z-10 shadow-md
+        ${dark ? "bg-gray-900 text-gray-100" : "bg-gray-100 text-gray-900"}`}>
+          {lexicon} - {frequency}x in NT
         </div>
-      </>
+        <div className={`flex flex-col space-y-4`}>
+        {countsPerBook.map(b => 
+          <>
+          {b.count > 0 &&
+          <div key={b.book} className={`flex bg-gray-500 bg-opacity-70 shadow-md`}>
+            <div className={`md:text-xl w-24 p-4 ${dark ? "text-gray-100" : "text-gray-900"}`}>{b.book}</div>
+            <div className={`flex w-full`}>
+            <div className={`bg-gray-300 bg-opacity-80 hover:bg-yellow-500 cursor-pointer flex justify-center items-center`} style={{width:Math.round(100*b.count/countMax)+'%'}}
+            onClick={() => setBookSelected(b.book)}>
+              {b.count}
+            </div>
+            </div>
+          </div>         
+          } 
+          </>
+        )}  
+        </div>              
       </div>
     </Layout>
   )

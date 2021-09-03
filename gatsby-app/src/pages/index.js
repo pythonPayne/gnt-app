@@ -47,22 +47,6 @@ const Index = () => {
     }
   }, [bookSelected])
 
-  
-  
-  // let links = []
-
-  // books.forEach((book,i) => (
-  //     links = [...links,
-  //         ...chapters.slice(0,book.numChapters).map(j => (
-  //             {
-  //                 'link':book.book+'-'+j             
-  //             }
-  //         ))
-  //     ]
-  // ))
-
-  
-
   return (
     <Layout>      
       <div className={`${dark ? "bg-gray-400" : "bg-white"} min-h-screen`}>      

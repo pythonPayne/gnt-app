@@ -6,7 +6,7 @@
   "license": "0BSD",
   "scripts": {
     "build": "gatsby build",
-    "develop": "gatsby develop",
+    "develop": "TAILWIND_MODE=watch gatsby develop --host 0.0.0.0 --port 8000",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx,json,md}\"",
     "start": "npm run develop",
     "serve": "gatsby serve",
@@ -24,11 +24,11 @@
     "redux": "^4.0.5"
   },
   "devDependencies": {
-    "autoprefixer": "^10.2.5",
+    "autoprefixer": "^10.3.4",
     "gatsby-plugin-postcss": "^4.1.0",
-    "postcss": "^8.2.8",
+    "postcss": "^8.3.6",
     "prettier": "2.2.1",
-    "tailwindcss": "^2.2.7"
+    "tailwindcss": "^2.2.9"
   },
   "repository": {
     "type": "git",

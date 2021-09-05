@@ -103,6 +103,7 @@ STATICFILES_DIRS = [
 
 GRAPHENE = {
     'SCHEMA': 'core.schema.schema',
+    'RELAY_CONNECTION_MAX_LIMIT': 1500,
 }
 
 CORS_ALLOWED_ORIGINS = [

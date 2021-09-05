@@ -2,7 +2,7 @@ import graphene
 from graphene import relay, ObjectType
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
-from .models import BcvIndex, Strongs, Morphology, Word
+from .models import BcvIndex, Strongs, Morphology, Word, Paradigm
 
 
 class BcvIndexNode(DjangoObjectType):
@@ -47,11 +47,20 @@ class WordNode(DjangoObjectType):
         interfaces = (relay.Node, )
 
 
+class ParadigmNode(DjangoObjectType):
+    class Meta:
+        model = Paradigm
+        filter_fields = {
+            'strongs': ['exact']
+        }
+        interfaces = (relay.Node, )
+
 class Query(graphene.ObjectType):
     allBcvindices = DjangoFilterConnectionField(BcvIndexNode)
     allWords = DjangoFilterConnectionField(WordNode)
     allStrongs = DjangoFilterConnectionField(StrongsNode)
     allMorphologies = DjangoFilterConnectionField(MorphologyNode)
+    allParadigms = DjangoFilterConnectionField(ParadigmNode)
 
 
 schema = graphene.Schema(query=Query)

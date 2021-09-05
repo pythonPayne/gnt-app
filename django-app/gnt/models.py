@@ -52,3 +52,20 @@ class Word(models.Model):
 
     def __str__(self):
         return f"{self.bcvIndex} --- {self.greek} --- {self.english}"
+
+
+class Paradigm(models.Model):
+    greek = models.CharField(max_length=36, blank=True, null=True)
+    function = models.CharField(max_length=24, blank=True, null=True)
+    tense = models.CharField(max_length=24, blank=True, null=True)
+    voice = models.CharField(max_length=24, blank=True, null=True)
+    mood = models.CharField(max_length=24, blank=True, null=True)
+    person = models.CharField(max_length=24, blank=True, null=True)
+    case = models.CharField(max_length=24, blank=True, null=True)
+    gender = models.CharField(max_length=24, blank=True, null=True)
+    number = models.CharField(max_length=24, blank=True, null=True)
+    strongs = models.ForeignKey(
+        Strongs, related_name="paradigm", on_delete=models.CASCADE, blank=True, null=True)
+
+    def __str__(self):
+        return self.greek

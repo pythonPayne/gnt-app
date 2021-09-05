@@ -1,5 +1,7 @@
 import pandas as pd
+import time
 
+t0 = time.time()
 ###############################################################################
 ###############################################################################
 # NOTES
@@ -186,3 +188,107 @@ z = z.rename(columns={
 
 # Morphology model
 z.to_pickle('../pickles/tegmc.pkl')
+
+###############################################################################
+###############################################################################
+# model: Paradigm
+###############################################################################
+###############################################################################
+print("prepping Paradigm pickle from STEP repo...")
+# read pkls created above
+a = pd.read_pickle('../pickles/tagnt.pkl')
+b = pd.read_pickle('../pickles/tegmc.pkl')
+c = pd.read_pickle('../pickles/strongs.pkl')
+
+#
+letters = []
+for word in list(a.greek):
+    for letter in word:
+        if letter not in letters:
+            letters.append(letter)
+letters = sorted(letters)
+bad_letters = [' ', ',', '.', '[', ']', '¶', 'ͅ', ';', '·', '᾽', '—']
+retained_letters = [l for l in letters if l not in bad_letters]
+
+fields = ['strongs_id', 'greek', 'function', 'tense', 'voice', 'mood', 'person', 'case', 
+'gender', 'number', 'frequency', 'lexicon', 'english', 'morphology_id',]
+df = a \
+    .merge(b, how='left', left_on='morphology_id', right_on='morphology') \
+    .merge(c, how='left', left_on='strongs_id', right_on='strongs')
+df = df[fields].fillna('')
+
+def new_greek(word):
+    for bad_letter in bad_letters:
+        word = word.replace(bad_letter,'')
+    return word.lower()
+
+## Consider changing these in original pkl files
+df.greek = df.greek.apply(lambda x: new_greek(x))
+df.voice = df.voice.apply(lambda x: '' if x=='' else 'Active' if x=='Active' else 'Middle/Passive')
+df.person = df.person.apply(lambda x: '' if x=='' else x[:3])
+
+## Group by 10 fields, then assign integer keys to each variable for custom sorting
+dg = df.groupby(fields[:10]).count().reset_index()
+
+dg['tense_'] = dg.tense.apply(lambda x: 
+0 if x=='Present' else 
+1 if x=='Imperfect' else 
+2 if x=='Future' else 
+3 if x=='Aorist' else 
+4 if x=='2nd Aorist' else
+5 if x=='Perfect' else
+6 if x=='2nd Perfect' else
+7 if x=='Pluperfect' else
+8 if x=='2nd Pluperfect' else
+9 if x=='2nd Future' else 10
+)
+
+dg['voice_'] = dg.voice.apply(lambda x: 
+0 if x=='Active' else 
+1 if x=='Middle/Passive' else 2)
+
+dg['mood_'] = dg.mood.apply(lambda x: 
+0 if x=='Indicative' else 
+1 if x=='Subjunctive' else
+2 if x=='Imperative' else 
+3 if x=='Optative' else 4) ## what about infinitive?
+
+dg['case_'] = dg.case.apply(lambda x: 
+0 if x=='Nominative' else 
+1 if x=='Genitive' else 
+2 if x=='Dative' else 
+3 if x=='Accusative' else 
+4 if x=='Vocative' else 5)
+
+dg['gender_'] = dg.gender.apply(lambda x: 
+0 if x=='Feminine' else 
+1 if x=='Masculine' else 
+2 if x=='Neuter' else 3)
+
+dg['number_'] = dg.number.apply(lambda x: 
+0 if x=='Singular' else 
+1 if x=='Plural' else 2)
+
+### trying to get paradigms for each strongs_id
+### having to sort and keep most common spelling/accenting
+### note: would need to add the frequencies together when dropping rows
+### note: what to do with things like (for example) G0011?
+### looks like infinitives have '' mood
+dg = dg.sort_values(by=['tense_', 'voice_', 'mood_', 'person', 'gender_', 'number_', 'case_', 'frequency'],
+ascending=[True, True, True, True, True, True, True, False])
+dg['key'] = dg.strongs_id+dg.function+dg.tense+dg.voice+dg.mood+dg.person+dg.case+dg.gender+dg.number
+keys=[]
+keep=[]
+for i,row in dg.iterrows():
+    if row.key not in keys:
+        keys.append(row.key)
+        keep.append(1)
+    else:
+        keep.append(0)
+dg['keep'] = keep
+dg = dg[dg.keep==1][fields[:11]].sort_values('strongs_id').reset_index(drop=True).reset_index().rename(columns={'index':'id'})
+
+# Paradigm model
+dg.to_pickle('../pickles/paradigms.pkl')
+
+print(f"Prepping pickles for db took {round(time.time()-t0,2)} seconds")

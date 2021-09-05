@@ -31,3 +31,8 @@ pkl_to_db(
     'gnt_word',
     'tagnt',
     ["id", "greek", "english", "bcv", "nestleAland", "bcvIndex_id", "morphology_id", "strongs_id"])
+pkl_to_db(
+    'gnt_paradigm',
+    'paradigms',
+    ["id", "greek", "function", "tense", "voice",
+     "mood", "person", "case", "gender", "number", "strongs_id"])    

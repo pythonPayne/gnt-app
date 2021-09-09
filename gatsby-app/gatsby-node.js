@@ -1,4 +1,5 @@
 const path = require(`path`)
+const strongsList = require('./strongsList');
 
 exports.createPages = ({actions}) => {
 
@@ -59,11 +60,10 @@ exports.createPages = ({actions}) => {
         })
     })
 
-    const numbers = [...Array(9999).keys()].map(x => x+1)
-
-    const data2 = numbers.map(n => "G" + ("000" + n).slice(-4))        
-
-    data2.forEach(strongs => {       
+    // const numbers = [...Array(9999).keys()].map(x => x+1)
+    // const data2 = numbers.map(n => "G" + ("000" + n).slice(-4))            
+    // const data3 = data2.filter(d => d === "G3056")
+    strongsList.strongs_array.forEach(strongs => {       
         actions.createPage({
         path: "word-" + strongs,
         component: path.resolve(`./src/templates/word.js`),

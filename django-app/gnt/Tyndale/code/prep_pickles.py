@@ -1,5 +1,6 @@
 import pandas as pd
 import time
+import json
 
 t0 = time.time()
 ###############################################################################
@@ -27,7 +28,7 @@ df1 = tagnt_to_df(
 df2 = tagnt_to_df(
     "../data/TAGNT Act-Rev - Translators Amalgamated Greek NT - STEPBible.org CC-BY.txt")
 df = pd.concat([df1, df2]).reset_index(drop=True)
-
+df = df.fillna('')
 # for indexing, sorting
 df["id"] = df.index
 df['book'] = df.reference.apply(lambda x: x.split('.')[0].split('_')[1])
@@ -38,6 +39,9 @@ df['verse'] = df.reference.apply(lambda x: x.split('.')[2][-2:])
 df['bcv'] = df.bookNum + df.chapter + df.verse
 df['chapter'] = df.chapter.astype(int)
 df['verse'] = df.verse.astype(int)
+
+# figure out later what to do with missing values
+df["morphology"] = df.morphology.apply(lambda x: 'MISSING' if x=='' else x)
 
 ###############################################################################
 ###############################################################################
@@ -111,7 +115,15 @@ df_strongs = strongs_ids.merge(tbesg, how='left', on='strongs_id')
 df_strongs = df_strongs.rename(columns={
     "strongs_id": "strongs",
 })
+
+# Strongs model
 df_strongs.to_pickle("../pickles/strongs.pkl")
+
+# List to json for gatsby-node to create only necessary pages
+# manually moved this file and added export statement
+# strongs_list = sorted(list(df_strongs.strongs.unique()))
+# with open('../../../../gatsby-app/src/data/strongsList.js', 'w') as f:
+#     json.dump(strongs_list, f)
 
 ###############################################################################
 ###############################################################################
@@ -186,6 +198,28 @@ z = z.rename(columns={
     "NUMBER": "number"
 })
 
+# figure out later what to do with missing values
+# for now...
+df = pd.read_pickle("../pickles/tagnt.pkl")
+m = list(df.morphology_id.unique())
+missing_morphologies = [x for x in m if x not in list(z.morphology.unique())]
+print(missing_morphologies)
+new_rows = []
+for morphology in missing_morphologies:
+    new_row = {}
+    new_row['morphology'] = morphology
+    new_row['function'] = ''
+    new_row['tense'] = ''
+    new_row['voice'] = ''
+    new_row['mood'] = ''
+    new_row['person'] = ''
+    new_row['case'] = ''
+    new_row['gender'] = ''
+    new_row['number'] = ''
+    new_rows.append(new_row)
+z2 = pd.DataFrame(new_rows) 
+z = pd.concat([z,z2])
+
 # Morphology model
 z.to_pickle('../pickles/tegmc.pkl')
 
@@ -200,7 +234,7 @@ a = pd.read_pickle('../pickles/tagnt.pkl')
 b = pd.read_pickle('../pickles/tegmc.pkl')
 c = pd.read_pickle('../pickles/strongs.pkl')
 
-#
+# removing letters from greek column
 letters = []
 for word in list(a.greek):
     for letter in word:

@@ -21,8 +21,7 @@ query($bcv_Gte: String!, $bcv_Lte: String!) {
                 english
                 strongs {
                   strongs
-                  lexicon
-                  transliteration
+                  lexicon                  
                   frequency
                 }
                 morphology {
@@ -57,7 +56,6 @@ const Chapter = (props) => {
   const [showMorphology, setShowMorphology] = useState(false)
   const [showStrongs, setShowStrongs] = useState(true)
   const [showLexicon, setShowLexicon] = useState(false)
-  const [showTransliteration, setShowTransliteration] = useState(false)
   const [showNestleAlandOnly, setShowNestleAlandOnly] = useState(true)
   const [showGreekColor, setShowGreekColor] = useState(true)
   
@@ -86,7 +84,7 @@ const Chapter = (props) => {
             <div id={`${props.path}#${i+1}`} className={`flex flex-col mr-2 mb-6 p-1 border ${dark && "border-gray-600 border-opacity-30"}`}>
               
               {morphology !== null &&
-                <div key={i} className={`text-sm tracking-wider p-1 rounded ${!showGreek && "hidden"}
+                <div key={i} className={`text-sm md:text-xl tracking-wider p-1 rounded ${!showGreek && "hidden"}
               
               ${(morphology.function === "Verb" && showGreekColor) && "bg-yellow-200"}
               ${(morphology.function === "Noun" && showGreekColor) && "bg-red-300"}
@@ -101,21 +99,18 @@ const Chapter = (props) => {
                 {word.node.greek}            
               </div>
               }
-              <div className={`p-1 text-xs ${!showEnglish && "hidden"}`}>
+              <div className={`p-1 text-xs md:text-lg ${!showEnglish && "hidden"}`}>
               {word.node.english}            
               </div>
-              <div className={`p-1 text-xs ${!showMorphology && "hidden"}`}>
+              <div className={`p-1 text-xs md:text-lg ${!showMorphology && "hidden"}`}>
               {morphology !== null && morphology.morphology}            
               </div>
-              <div className={`p-1 text-xs ${!showStrongs && "hidden"}`}>
+              <div className={`p-1 text-xs md:text-lg ${!showStrongs && "hidden"}`}>
                 <Link to={`/word-${strongs.strongs}`}>{strongs !== null && strongs.strongs}</Link>
               </div>
-              <div className={`p-1 text-xs ${!showLexicon && "hidden"}`}>
+              <div className={`p-1 text-xs md:text-lg ${!showLexicon && "hidden"}`}>
                 {strongs !== null && strongs.lexicon}
-              </div>
-              <div className={`p-1 text-xs ${!showTransliteration && "hidden"}`}>
-                {strongs !== null && strongs.transliteration}
-              </div>
+              </div>              
             </div>
           )}
           })}
@@ -134,8 +129,7 @@ const Chapter = (props) => {
             <th className={hcell}>English</th>
             <th className={hcell}>Morphology</th>
             <th className={hcell}>Strongs</th>
-            <th className={hcell}>Lexicon</th>
-            <th className={hcell}>Transliteration</th>
+            <th className={hcell}>Lexicon</th>            
           </tr>
         </thead>      
         <tbody>
@@ -149,8 +143,7 @@ const Chapter = (props) => {
                 <td className={tcell}>{word.node.english}</td>
                 <td className={tcell}>{morphology !== null && morphology.morphology}</td>
                 <td className={tcell}>{strongs !== null && strongs.strongs}</td>
-                <td className={tcell}>{strongs !== null && strongs.lexicon}</td>
-                <td className={tcell}>{strongs !== null && strongs.transliteration}</td>
+                <td className={tcell}>{strongs !== null && strongs.lexicon}</td>                
               </tr>
           )}
         })}    
@@ -167,9 +160,9 @@ const Chapter = (props) => {
   const settingsC = (name, setting, setSetting) => (
     <div className={`flex items-center`}>
       <div className={`mr-4 w-32`}>{name}</div>
-      <div className={`w-8 h-8 ${setting ? "bg-green-500" : "bg-gray-200"}`} 
+      <div className={`w-8 h-8 md:w-10 md:h-10 ${setting ? "bg-green-500" : "bg-gray-200"}`} 
       onClick={()=>setSetting(!setting)}></div>
-      <div className={`w-8 h-8 ${setting ? "bg-gray-200" : "bg-red-500"}`} 
+      <div className={`w-8 h-8 md:w-10 md:h-10 ${setting ? "bg-gray-200" : "bg-red-500"}`} 
       onClick={()=>setSetting(!setting)}></div>
     </div>
   )
@@ -186,15 +179,16 @@ const Chapter = (props) => {
         
         {showSettings &&  
           <>          
-          <div className={`flex items-center flex-col space-y-5 pt-8`}>
+          <div className={`flex items-center flex-col space-y-5 pt-8 md:text-xl`}>
               {settingsC("Greek", showGreek, setShowGreek)}
               {settingsC("English", showEnglish, setShowEnglish)}
               {settingsC("Morphology", showMorphology, setShowMorphology)}
               {settingsC("Strongs", showStrongs, setShowStrongs)}
-              {settingsC("Lexicon", showLexicon, setShowLexicon)}
-              {settingsC("Transliteration", showTransliteration, setShowTransliteration)}
+              {settingsC("Lexicon", showLexicon, setShowLexicon)}              
               {settingsC("Nestle Only", showNestleAlandOnly, setShowNestleAlandOnly)}   
-              {settingsC("Greek Color", showGreekColor, setShowGreekColor)}              
+              {settingsC("Greek Color", showGreekColor, setShowGreekColor)}  
+              <button className={`focus:outline-none rounded-lg px-10 py-2 ${dark ? "bg-gray-500 bg-opacity-50" : "bg-gray-300 bg-opacity-50"} `}
+              onClick={() => setShowSettings(!showSettings)}>Go Back</button>            
           </div>
           </>
         }
@@ -222,7 +216,7 @@ const Chapter = (props) => {
           <path strokeLinecap="round" strokeLinejoin="round" d={verseMode ? bookIcon : listIcon} />                 
         </svg>  
 
-        <div className={`${showSettings && "invisible"} w-[200px] flex flex-nowrap space-x-2 overflow-x-auto px-2 py-2`}>
+        <div className={`${showSettings && "invisible"} w-[200px] md:w-[500px] lg:w-[800px] xl:w-[1000px] flex flex-nowrap justify-center space-x-2 overflow-x-auto px-2 py-2`}>
             {([...Array(verses.length).keys()].map(x => x+1)).map(num => (
               <button 
                 className={`active:border-none focus:outline-none border-none ${verseNum == num && "bg-yellow-600 bg-opacity-70 text-gray-900 rounded-full"}`} 

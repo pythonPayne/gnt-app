@@ -43,14 +43,14 @@ const Index = () => {
 
   return (
     <Layout>      
-      <div className={`${dark ? "bg-gray-400" : "bg-white"} min-h-screen`}>      
+      <div className={`${dark ? "bg-gray-400" : "bg-white"} min-h-screen md:text-lg`}>      
         {/* {links.map(link => <div><Link to={link.link}>{link.link}</Link></div>)} */}
         <div className={`flex py-8`}></div>
 
         <div className={`flex justify-center`}>
-          <div className={`flex flex-col space-y-5 py-4 items-center h-48 w-48 overflow-y-auto ${dark ? "border border-gray-600" : "border"}`}>        
+          <div className={`flex flex-col space-y-5 py-4 items-center h-48 md:h-72 w-48 overflow-y-auto ${dark ? "border border-gray-600" : "border"}`}>        
             {books.map((book,i) => 
-              <div key={i} className={`px-8 cursor-pointer rounded-lg ${book.book===bookSelected && "bg-yellow-600 bg-opacity-50"}`}
+              <div key={i} className={`px-8 cursor-pointer rounded-lg ${book.book===bookSelected.book && "bg-yellow-600 bg-opacity-50"}`}
               onClick={() => {setBookSelected(books[i]); setChapterSelected(1);}}>
                 {book.book}
               </div>)}

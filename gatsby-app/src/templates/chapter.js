@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { graphql, Link } from "gatsby"
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { toggleGreek, toggleEnglish, toggleMorphology, toggleStrongs,
+toggleLexicon, toggleNestleAlandOnly, toggleGreekColor } from '../redux/actions/chapterSettings'
 import Layout from '../components/Layout'
 
 export const query = graphql`
@@ -45,34 +47,32 @@ query($bcv_Gte: String!, $bcv_Lte: String!) {
 }
 `
 const Chapter = (props) => {
-  const theme = useSelector((state) => state.layout.theme)    
+  const theme = useSelector((state) => state.layout.theme)
+  const showGreek = useSelector((state) => state.chapterSettings.showGreek)
+  const showEnglish = useSelector((state) => state.chapterSettings.showEnglish)
+  const showMorphology = useSelector((state) => state.chapterSettings.showMorphology)
+  const showStrongs = useSelector((state) => state.chapterSettings.showStrongs)
+  const showLexicon = useSelector((state) => state.chapterSettings.showLexicon)
+  const showNestleAlandOnly = useSelector((state) => state.chapterSettings.showNestleAlandOnly)
+  const showGreekColor = useSelector((state) => state.chapterSettings.showGreekColor)
+
+  const dispatch = useDispatch() 
+
   const dark = theme === "dark"
   const hash = props.location.hash.slice(1,)
   const [showSettings, setShowSettings] = useState(false)
-  const [verseMode, setVerseMode] = useState(true)
+  const [mode, setMode] = useState('chapter')
   const [verseNum, setVerseNum] = useState(1)
-  const [showGreek, setShowGreek] = useState(true)
-  const [showEnglish, setShowEnglish] = useState(true)
-  const [showMorphology, setShowMorphology] = useState(false)
-  const [showStrongs, setShowStrongs] = useState(true)
-  const [showLexicon, setShowLexicon] = useState(false)
-  const [showNestleAlandOnly, setShowNestleAlandOnly] = useState(true)
-  const [showGreekColor, setShowGreekColor] = useState(true)
   
   useEffect(() => {
-    setVerseNum(Math.max(1,hash))
-    return () => {
-      console.log('cleanup hash')
-    }
+    setVerseNum(Math.max(1,hash))    
   }, [hash])
 
   const verses = props.data && props.data.DJANGO.allBcvindices.edges
   const bookLong = props.data && props.data.DJANGO.allBcvindices.edges[0].node.bookLong
   const chapter = props.data && props.data.DJANGO.allBcvindices.edges[0].node.chapter
-  const verse = verses && verses[verseNum-1]
-  const words = verse && verse.node.word.edges
   
-  const showVerse = () => {    
+  const showVerse = (words) => {    
     return (
       <div className={`flex flex-wrap`}>
         {words.map((word,i) => {
@@ -81,10 +81,10 @@ const Chapter = (props) => {
           if (morphology !== null && morphology.function !== "Punctuation" && (word.node.nestleAland || showNestleAlandOnly===false)) {
           return (
             
-            <div id={`${props.path}#${i+1}`} className={`flex flex-col mr-2 mb-6 p-1 border ${dark && "border-gray-600 border-opacity-30"}`}>
+            <div key={i} className={`flex flex-col mr-2 mb-6 p-1 border ${dark && "border-gray-600 border-opacity-30"}`}>
               
               {morphology !== null &&
-                <div key={i} className={`text-sm md:text-xl tracking-wider p-1 rounded ${!showGreek && "hidden"}
+                <div className={`text-sm md:text-xl tracking-wider p-1 rounded ${!showGreek && "hidden"}
               
               ${(morphology.function === "Verb" && showGreekColor) && "bg-yellow-200"}
               ${(morphology.function === "Noun" && showGreekColor) && "bg-red-300"}
@@ -118,111 +118,82 @@ const Chapter = (props) => {
     )
   }
 
-  const hcell = `px-2 py-1`
-  const tcell = `px-2 py-1`
-  const showVerseTable = () => {    
-    return (
-      <table className={`whitespace-nowrap text-left`}>        
-        <thead className={``}>
-          <tr className={`shadow-lg bg-white`}>
-            <th className={hcell}>Greek</th>
-            <th className={hcell}>English</th>
-            <th className={hcell}>Morphology</th>
-            <th className={hcell}>Strongs</th>
-            <th className={hcell}>Lexicon</th>            
-          </tr>
-        </thead>      
-        <tbody>
-        {words.map((word,i) => {
-          const morphology = word.node.morphology
-          const strongs = word.node.strongs
-          if (morphology !== null && morphology.function !== "Punctuation" && (word.node.nestleAland || showNestleAlandOnly===false)) {
-            return (
-              <tr key={i} className={``}>
-                <td className={tcell}>{word.node.greek}</td>
-                <td className={tcell}>{word.node.english}</td>
-                <td className={tcell}>{morphology !== null && morphology.morphology}</td>
-                <td className={tcell}>{strongs !== null && strongs.strongs}</td>
-                <td className={tcell}>{strongs !== null && strongs.lexicon}</td>                
-              </tr>
-          )}
-        })}    
-        </tbody>          
-      </table>
-    )
-  }
-
   const settingsIcon = "M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"
-  const bookIcon = "M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
-  const listIcon = "M4 6h16M4 10h16M4 14h16M4 18h16"
+  const codeIcon = "M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
   const settingsIconClose = "M6 18L18 6M6 6l12 12"
   
   const settingsC = (name, setting, setSetting) => (
     <div className={`flex items-center`}>
       <div className={`mr-4 w-32`}>{name}</div>
       <div className={`w-8 h-8 md:w-10 md:h-10 ${setting ? "bg-green-500" : "bg-gray-200"}`} 
-      onClick={()=>setSetting(!setting)}></div>
+      onClick={()=>dispatch(setSetting(!setting))}></div>
       <div className={`w-8 h-8 md:w-10 md:h-10 ${setting ? "bg-gray-200" : "bg-red-500"}`} 
-      onClick={()=>setSetting(!setting)}></div>
+      onClick={()=>dispatch(setSetting(!setting))}></div>
     </div>
   )
 
   return (
     <Layout>      
       
-      <div className={`${dark ? "bg-gray-400" : "bg-white"} min-h-screen`}>      
+      <div className={`${dark ? "bg-gray-400" : "bg-gray-50"} min-h-screen`}>      
         
           <div className={`flex justify-center px-8 py-2 text-2xl sticky top-0 z-10 shadow-md
           ${dark ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"}`}>
-            {showSettings ? "Settings" : bookLong + " " + chapter + ":" + verseNum}
+            {showSettings && "Settings"} 
+            {!showSettings && mode=='chapter' && bookLong + " " + chapter}
+            
           </div>
         
         {showSettings &&  
           <>          
           <div className={`flex items-center flex-col space-y-5 pt-8 md:text-xl`}>
-              {settingsC("Greek", showGreek, setShowGreek)}
-              {settingsC("English", showEnglish, setShowEnglish)}
-              {settingsC("Morphology", showMorphology, setShowMorphology)}
-              {settingsC("Strongs", showStrongs, setShowStrongs)}
-              {settingsC("Lexicon", showLexicon, setShowLexicon)}              
-              {settingsC("Nestle Only", showNestleAlandOnly, setShowNestleAlandOnly)}   
-              {settingsC("Greek Color", showGreekColor, setShowGreekColor)}  
+              {settingsC("Greek", showGreek, toggleGreek)}
+              {settingsC("English", showEnglish, toggleEnglish)}
+              {settingsC("Morphology", showMorphology, toggleMorphology)}
+              {settingsC("Strongs", showStrongs, toggleStrongs)}
+              {settingsC("Lexicon", showLexicon, toggleLexicon)}              
+              {settingsC("Nestle Only", showNestleAlandOnly, toggleNestleAlandOnly)}   
+              {settingsC("Greek Color", showGreekColor, toggleGreekColor)}  
               <button className={`focus:outline-none rounded-lg px-10 py-2 ${dark ? "bg-gray-500 bg-opacity-50" : "bg-gray-300 bg-opacity-50"} `}
               onClick={() => setShowSettings(!showSettings)}>Go Back</button>            
           </div>
           </>
         }
 
-        {!showSettings && verseMode &&                        
-          <div className={`flex justify-center pl-2 pr-2 pt-6 pb-10`}>
-            {words && showVerse()}        
-          </div>
-        }
-
-        {!showSettings && !verseMode &&   
-        
-          <div className={`overflow-x-auto pb-[300px]`}>
-            {words && showVerseTable()}
-          </div>
-          
+        {!showSettings && mode=='chapter' &&           
+          <>
+            {verses.map((verse,i) => (
+              <div id={`${i+1}`} className={`flex pt-14 px-2`}>
+                <div className={'flex pl-2 pr-2 font-bold'}>{i+1}</div>
+                  <div key={i} className={`flex pl-2 pr-2`}>                
+                    {showVerse(verse.node.word.edges)}
+                  </div>
+              </div>
+            ))}
+          </>          
         }
             
       <div className={`px-2 flex justify-between items-center w-full fixed bottom-0 h-12
       ${dark ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900 border-t border-gray-300"}`}>
       
-        <svg className={`${showSettings && "invisible"} w-6 h-6 stroke-current stroke-2 text-opacity-50 ${dark ? "text-yellow-500 text-opacity-100" : "text-gray-900"}`}
-          fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
-          onClick={() => setVerseMode(!verseMode)}>
-          <path strokeLinecap="round" strokeLinejoin="round" d={verseMode ? bookIcon : listIcon} />                 
-        </svg>  
+        <Link to="/about">
+          <svg className={`${showSettings && "invisible"} w-6 h-6 stroke-current stroke-2 text-opacity-50 ${dark ? "text-yellow-500 text-opacity-100" : "text-gray-900"}`}
+          fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path strokeLinecap="round" strokeLinejoin="round" d={codeIcon} />  
+          </svg>  
+        </Link>                 
+        
 
-        <div className={`${showSettings && "invisible"} w-[200px] md:w-[500px] lg:w-[800px] xl:w-[1000px] flex flex-nowrap justify-center space-x-2 overflow-x-auto px-2 py-2`}>
-            {([...Array(verses.length).keys()].map(x => x+1)).map(num => (
-              <button 
-                className={`active:border-none focus:outline-none border-none ${verseNum == num && "bg-yellow-600 bg-opacity-70 text-gray-900 rounded-full"}`} 
-                key={num} onClick={() => {verseNum !== num && setVerseNum({num})}}>
-                <Link className={`px-2 py-1`} to={`${props.path}#${num}`}>{num}</Link>
-              </button>))}
+        <div className={`${showSettings && "invisible"} w-[200px] md:w-[500px] lg:w-[800px] xl:w-[1000px] flex flex-nowrap space-x-2 overflow-x-auto px-2 py-2`}>
+            {([...Array(verses.length).keys()].map(x => x+1)).map(num => (                              
+                <a key={num} href={`${props.path.slice(1,)}#${num}`}>
+                  <button className={`px-2 active:border-none focus:outline-none border-none 
+                          ${verseNum  == num && "bg-yellow-600 bg-opacity-70 text-gray-900 rounded-full"}`} 
+                          onClick={() => {verseNum !== num && setVerseNum({num})}}>
+                    {num}
+                  </button>
+                </a>
+              ))}
         </div>
 
         <svg className={`w-6 h-6 stroke-current stroke-2 text-opacity-50 ${dark ? "text-yellow-500 text-opacity-100" : "text-gray-900"}`}

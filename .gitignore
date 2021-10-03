@@ -13,3 +13,5 @@ __pycache__/
 gatsby-app/node_modules
 gatsby-app/.cache
 gatsby-app/public
+
+todo.txt

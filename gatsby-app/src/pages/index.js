@@ -43,14 +43,16 @@ const Index = () => {
 
   return (
     <Layout>      
-      <div className={`${dark ? "bg-gray-400" : "bg-white"} min-h-screen md:text-lg`}>      
-        {/* {links.map(link => <div><Link to={link.link}>{link.link}</Link></div>)} */}
+      <div className={`${dark ? "bg-gray-400" : "bg-gray-50"} min-h-screen md:text-lg`}>      
+        
         <div className={`flex py-8`}></div>
 
         <div className={`flex justify-center`}>
-          <div className={`flex flex-col space-y-5 py-4 items-center h-48 md:h-72 w-48 overflow-y-auto ${dark ? "border border-gray-600" : "border"}`}>        
+          <div className={`flex flex-col space-y-5 py-4 items-center h-48 md:h-72 w-48 overflow-y-auto 
+          ${dark ? "border border-gray-500" : "border border-gray-300"}`}>        
             {books.map((book,i) => 
-              <div key={i} className={`px-8 cursor-pointer rounded-lg ${book.book===bookSelected.book && "bg-yellow-600 bg-opacity-50"}`}
+              <div key={i} className={`px-8 cursor-pointer rounded-lg 
+              ${book.book===bookSelected.book && "bg-yellow-600 bg-opacity-50"}`}
               onClick={() => {setBookSelected(books[i]); setChapterSelected(1);}}>
                 {book.book}
               </div>)}
@@ -60,7 +62,8 @@ const Index = () => {
         <div className={`flex py-4`}></div>
 
         <div className={`flex justify-center`}>
-          <div className={`flex w-48 px-4 py-4 overflow-x-auto ${dark ? "border border-gray-600" : "border"}`}>        
+          <div className={`flex w-48 px-4 py-4 overflow-x-auto 
+          ${dark ? "border border-gray-500" : "border border-gray-300"}`}>        
             {chapters.slice(0,bookSelected.numChapters).map(num => 
               <div key={num} className={`px-3 cursor-pointer rounded-lg ${num===chapterSelected && "bg-yellow-600 bg-opacity-50"}`}
               onClick={() => setChapterSelected(num)}>
@@ -71,10 +74,9 @@ const Index = () => {
 
         <div className={`flex py-4`}></div>
 
-        <div className={`flex justify-center`}>
-          <div className={`flex w-48 px-4 py-4 cursor-pointer overflow-x-auto shadow-lg rounded-lg justify-center ${dark ? "bg-blue-500" : "bg-blue-300"}`}>        
-            <Link to={bookSelected.bookShort+'-'+chapterSelected}>{bookSelected.book} {chapterSelected}</Link>
-          </div>
+        <div className={`flex justify-center`}>          
+            <Link className={`flex w-48 px-4 py-4 cursor-pointer overflow-x-auto shadow-lg rounded-lg justify-center ${dark ? "bg-blue-500" : "bg-blue-300"}`}
+             to={bookSelected.bookShort+'-'+chapterSelected}>{bookSelected.book} {chapterSelected}</Link>          
         </div>
         
 

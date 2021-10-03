@@ -1,3 +1,10 @@
 // layout
 export const TOGGLE_THEME = "TOGGLE_THEME"
-
+// chapterSettings
+export const SHOW_GREEK = "SHOW_GREEK"
+export const SHOW_ENGLISH = "SHOW_ENGLISH"
+export const SHOW_MORPHOLOGY = "SHOW_MORPHOLOGY"
+export const SHOW_STRONGS = "SHOW_STRONGS"
+export const SHOW_LEXICON = "SHOW_LEXICON"
+export const SHOW_NESTLEALANDONLY = "SHOW_NESTLEALANDONLY"
+export const SHOW_GREEKCOLOR = "SHOW_GREEKCOLOR"

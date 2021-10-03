@@ -3,7 +3,7 @@ import {
 } from "../types"
 
 const initialState = {
-    theme: "dark"
+    theme: "light"
 }
 
 const layoutReducer = (state = initialState, action) => {

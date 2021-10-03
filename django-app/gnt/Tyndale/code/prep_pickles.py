@@ -203,7 +203,7 @@ z = z.rename(columns={
 df = pd.read_pickle("../pickles/tagnt.pkl")
 m = list(df.morphology_id.unique())
 missing_morphologies = [x for x in m if x not in list(z.morphology.unique())]
-print(missing_morphologies)
+# print(missing_morphologies)
 new_rows = []
 for morphology in missing_morphologies:
     new_row = {}

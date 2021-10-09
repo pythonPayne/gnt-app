@@ -29,7 +29,8 @@ class MorphologyNode(DjangoObjectType):
     class Meta:
         model = Morphology
         filter_fields = {
-            'morphology': ['exact']
+            'morphology': ['exact'],
+            'function': ['exact', 'in'],            
         }
         interfaces = (relay.Node, )
 

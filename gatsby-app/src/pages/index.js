@@ -40,6 +40,7 @@ const Index = () => {
     {id: 26, book:'Jude', bookShort:'Jud', numChapters: 1},
     {id: 27, book:'Revelation', bookShort:'Rev', numChapters: 22},
 ]
+const codeIcon = "M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"
 
   return (
     <Layout>      
@@ -84,6 +85,13 @@ const Index = () => {
         <div className={`px-2 flex justify-between items-center w-full fixed bottom-0 h-12
       ${dark ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900 border-t border-gray-300"}`}>
       
+        <Link to="/about">
+          <svg className={`w-6 h-6 stroke-current stroke-2 text-opacity-50 ${dark ? "text-yellow-500 text-opacity-100" : "text-gray-900"}`}
+          fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path strokeLinecap="round" strokeLinejoin="round" d={codeIcon} />  
+          </svg>  
+        </Link>   
+
         </div>
 
       </div>

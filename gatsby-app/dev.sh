@@ -1,1 +1,1 @@
-gatsby clean && npm run develop
+gatsby clean && npm run develop --host=0.0.0.0

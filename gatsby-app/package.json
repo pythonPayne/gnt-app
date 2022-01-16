@@ -24,6 +24,7 @@
     "redux": "^4.0.5"
   },
   "devDependencies": {
+    "@kamona/tailwindcss-perspective": "^0.1.1",
     "autoprefixer": "^10.3.4",
     "gatsby-plugin-postcss": "^4.1.0",
     "postcss": "^8.3.6",

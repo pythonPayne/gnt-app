@@ -25,7 +25,8 @@ INSTALLED_APPS = [
     'graphene_django',
     'django_filters',
     'corsheaders',
-    'gnt',
+    # 'gnt',
+    'api',
 ]
 
 MIDDLEWARE = [

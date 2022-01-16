@@ -1,0 +1,4 @@
+Tyndale/data <-- holds downloaded data from STEP repo
+Tyndale/code/prep_pickles.py <-- transforms Tyndale/data to Tyndale/pickles (for https://gnt.netlify.app)
+Tyndale/code/new_api_from_pickles.ipynb <-- transforms Tyndale/pickles into a clean API
+Tyndale/code/explore.ipynb <-- looks at those clean pickles

@@ -1,8 +1,9 @@
 import graphene
-import gnt.schema
+# import gnt.schema
+import api.schema
 
 
-class Query(gnt.schema.Query, graphene.ObjectType):
+class Query(api.schema.Query, graphene.ObjectType):
     hello = graphene.String(default_value="Hello from Django!")
 
 

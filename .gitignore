@@ -3,6 +3,7 @@ django-app/db.sqlite3
 django-app/gnt/Tyndale/OLD
 django-app/gnt/Tyndale/notes.txt
 
+
 *.log
 *.pot
 *.pyc
@@ -13,5 +14,10 @@ __pycache__/
 gatsby-app/node_modules
 gatsby-app/.cache
 gatsby-app/public
+
+gnt-frontend/node_modules
+gnt-frontend/.cache
+gnt-frontend/public
+
 
 todo.txt

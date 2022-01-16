@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { toggleGreek, toggleEnglish, toggleMorphology, toggleStrongs,
 toggleLexicon, toggleNestleAlandOnly, toggleGreekColor } from '../redux/actions/chapterSettings'
 import Layout from '../components/Layout'
+import VocabCards from '../components/VocabCards'
 
 export const query = graphql`
 query($bcv_Gte: String!, $bcv_Lte: String!) {
@@ -72,7 +73,11 @@ const Chapter = (props) => {
   // run when hash changes
   const hash = props.location.hash.slice(1,)
   useEffect(() => {
-    setVerseNum(Math.max(1,hash))    
+    if(hash==='vocab'){
+      setMode('vocab')
+    } else {
+      setVerseNum(Math.max(1,hash))    
+    }
   }, [hash])
 
   // data from props
@@ -153,13 +158,14 @@ const Chapter = (props) => {
       
       <div className={`${dark ? "bg-gray-400" : "bg-gray-50"} min-h-screen`}>      
         
-          <div className={`flex justify-center px-8 py-2 text-2xl sticky top-0 z-10 shadow-md
-          ${dark ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"}`}>
-            {showSettings && "Settings"} 
-            {!showSettings && (mode==='chapter' | mode==='vocab') && bookLong + " " + chapter}
-            
-          </div>
-        
+        {/* title */}
+        <div className={`flex justify-center px-8 py-2 text-2xl sticky top-0 z-10 shadow-md
+        ${dark ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900"}`}>
+          {showSettings && "Settings"} 
+          {!showSettings && (mode==='chapter' | mode==='vocab') && bookLong + " " + chapter}            
+        </div>
+      
+        {/* chapter settings */}
         {showSettings &&  
           <>          
           <div className={`flex items-center flex-col space-y-5 pt-8 md:text-xl`}>
@@ -176,6 +182,7 @@ const Chapter = (props) => {
           </>
         }
 
+        {/* vocab settings */}
         {showVocabSettings &&
           <>
           <div className={`flex items-center flex-col space-y-5 pt-8 md:text-xl`}>
@@ -185,48 +192,54 @@ const Chapter = (props) => {
           </>
         }
 
+        {/* chapter mode */}
         {!showSettings && !showVocabSettings && mode=='chapter' &&           
           <>
+          <div className={`pb-28`}>
             {verses.map((verse,i) => (
-              <div id={`${i+1}`} className={`flex pt-14 px-2`}>
+              <div id={`${i+1}`} key={i} className={`flex pt-14 px-2`}>
                 <div className={'flex pl-2 pr-2 font-bold'}>{i+1}</div>
-                  <div key={i} className={`flex pl-2 pr-2`}>                
+                  <div className={`flex pl-2 pr-2`}>                
                     {showVerse(verse.node.word.edges)}
                   </div>
               </div>
             ))}
+          </div>
           </>          
         }
 
-        {!showSettings && !showVocabSettings && mode=='vocab' &&           
-          <>
-            {uniqueStrongs.map((word,i) => (
-              <div key={i} className={``}>
-                {word.lexicon}--{word.frequency}--{word.gloss}
-              </div>
-            ))}
-          </>          
+        {/* vocab mode */}
+        {!showSettings && !showVocabSettings && mode=='vocab' &&              
+            <div id="vocab">                     
+                <VocabCards cards={uniqueStrongs} />              
+            </div>
         }
             
+      {/* bottom menu */}
       <div className={`px-2 flex justify-between items-center w-full fixed bottom-0 h-12
       ${dark ? "bg-gray-900 text-white" : "bg-gray-100 text-gray-900 border-t border-gray-300"}`}>
       
-        
+        {/* LEFT */}
         {mode === 'chapter' && 
+        <a href={`${props.path.slice(1,)}#vocab`}>
           <button className={`${(showSettings | showVocabSettings) && "invisible"} text-gray-900 ${dark && "text-yellow-500"}`} 
-          onClick={()=>setMode('vocab')}>
+          onClick={()=> { setMode('vocab'); setVerseNum(1); }}>
             Vocab
           </button>
+        </a>
         } 
 
         {mode === 'vocab' && 
-          <button className={`${(showSettings | showVocabSettings) && "invisible"} text-gray-900 ${dark && "text-yellow-500"}`} 
-          onClick={()=>setMode('chapter')}>
-            Chapter
-          </button>
+          <a href={`${props.path.slice(1,)}#${1}`}>
+            <button className={`${(showSettings | showVocabSettings) && "invisible"} text-gray-900 ${dark && "text-yellow-500"}`} 
+            onClick={()=> { setMode('chapter'); setVerseNum(1); }}>
+              Chapter
+            </button>
+          </a>
         } 
         
-        <div className={`${(showSettings | mode !== 'chapter') && "invisible"} w-[200px] md:w-[500px] lg:w-[800px] xl:w-[1000px] flex flex-nowrap space-x-2 overflow-x-auto px-2 py-2`}>
+        {/* MIDDLE */}
+        {/* <div className={`${(showSettings | mode !== 'chapter') && "invisible"} w-[200px] md:w-[500px] lg:w-[800px] xl:w-[1000px] flex flex-nowrap space-x-2 overflow-x-auto px-2 py-2`}>
             {([...Array(verses.length).keys()].map(x => x+1)).map(num => (                              
                 <a key={num} href={`${props.path.slice(1,)}#${num}`}>
                   <button className={`px-2 active:border-none focus:outline-none border-none 
@@ -236,10 +249,11 @@ const Chapter = (props) => {
                   </button>
                 </a>
               ))}
-        </div>
+        </div> */}
 
+        {/* RIGHT */}
         {mode === 'chapter' &&      
-        <svg className={`w-6 h-6 stroke-current stroke-2 text-opacity-50 ${dark ? "text-yellow-500 text-opacity-100" : "text-gray-900"}`}
+        <svg className={`w-6 h-6 stroke-current cursor-pointer stroke-2 text-opacity-50 ${dark ? "text-yellow-500 text-opacity-100" : "text-gray-900"}`}
           fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
           onClick={() => setShowSettings(!showSettings)}>
           <path strokeLinecap="round" strokeLinejoin="round" d={showSettings ? settingsIconClose : settingsIcon} />                 
@@ -247,7 +261,7 @@ const Chapter = (props) => {
         }
 
         {mode === 'vocab' &&      
-        <svg className={`w-6 h-6 stroke-current stroke-2 text-opacity-50 ${dark ? "text-yellow-500 text-opacity-100" : "text-gray-900"}`}
+        <svg className={`w-6 h-6 stroke-current cursor-pointer stroke-2 text-opacity-50 ${dark ? "text-yellow-500 text-opacity-100" : "text-gray-900"}`}
           fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
           onClick={() => setShowVocabSettings(!showVocabSettings)}>
           <path strokeLinecap="round" strokeLinejoin="round" d={showVocabSettings ? settingsIconClose : settingsIcon} />                 

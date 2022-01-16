@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import {Link} from 'gatsby'
 import { useSelector } from 'react-redux'
 import Layout from '../components/Layout'

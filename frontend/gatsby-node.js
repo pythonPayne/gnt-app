@@ -33,8 +33,7 @@ exports.createPages = ({actions}) => {
         {id: 27, bookNameAbbrev:'Rev', numChapters: 22},
     ]
     let data = []
-
-    // books.filter(book => book.id === 4).forEach(book => (
+    
     books.forEach(book => (        
         data = [...data,
             ...chapters.slice(0,book.numChapters).map(j => (
@@ -53,19 +52,20 @@ exports.createPages = ({actions}) => {
         component: path.resolve(`./src/templates/chapter.js`),
         context: {        
             chapId: chapter.chapId,            
-            defer: true,
+            
         }        
         })
     })
 
-    const lexnIds = [...Array(5390).keys()].map(n => ("000" + n).slice(-4))    
+    const lexnIds = [...Array(5390).keys()].map(n => ("000" + n).slice(-4))        
+    // const lexnIds = [...Array(5390).keys()].slice(1,11).map(n => ("000" + n).slice(-4))        
     lexnIds.forEach(lexnId => {       
         actions.createPage({
         path: "word-" + lexnId,
         component: path.resolve(`./src/templates/word.js`),
         context: {        
             lexnId: lexnId,        
-            defer: true,
+            
         }        
         })
     })

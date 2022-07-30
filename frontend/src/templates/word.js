@@ -6,7 +6,7 @@ import VerseCard from "../components/VerseCard"
 import WordBarChart from "../components/WordBarChart"
 import { toggleShowMenu } from "../redux/actions/layout"
 import { toggleExpandAllVerses } from "../redux/actions/verseCard"
-import { setSectionShowing, setLexnIdLastVisited, clearWordState } from "../redux/actions/word"
+import { setSectionShowing, setLexnIdLastVisited, clearWordState, setParsIds, setScrollPosition } from "../redux/actions/word"
 import Carousel from "../components/Carousel"
 
 export const query = graphql`
@@ -73,6 +73,7 @@ const Word = (props) => {
   
   const book = useSelector(state => state.word.book)  
   const sectionShowing = useSelector(state => state.word.sectionShowing)
+  const parsIds = useSelector(state => state.word.parsIds)
   const parsTense = useSelector(state => state.word.parsTense)
   const parsVoice = useSelector(state => state.word.parsVoice)
   const parsMood = useSelector(state => state.word.parsMood)
@@ -81,13 +82,25 @@ const Word = (props) => {
   const parsGender = useSelector(state => state.word.parsGender)
   const parsNumber = useSelector(state => state.word.parsNumber)
   const lexnIdLastVisited = useSelector(state => state.word.lexnIdLastVisited)
+  const scrollPosition = useSelector(state => state.word.scrollPosition)
        
   const [lexn, setLexn] = useState(null)
   const [pdgm, setPdgm] = useState(null)
-  const [verses, setVerses] = useState(null)  
-  
-  useEffect(() => {
+  const [pdgmF, setPdgmF] = useState(null)
+  const [verses, setVerses] = useState(null)
 
+  useEffect(() => {
+    if (props.data.gnt.allLexns.edges[0].node.lexnId !== lexnIdLastVisited){
+      dispatch(clearWordState())
+      dispatch(setLexnIdLastVisited(props.data.gnt.allLexns.edges[0].node.lexnId))
+    } else {      
+      setTimeout(function () {
+        window.scrollTo(0, scrollPosition);
+      },200);      
+    }
+  },[])
+
+  useEffect(() => {
     setLexn(props.data.gnt.allLexns.edges[0].node)
     setPdgm(props.data.gnt.allLexns.edges[0].node.pdgm.edges.sort((a,b) => a.node.pdgmPars.parsRank - b.node.pdgmPars.parsRank))
     setVerses(
@@ -101,11 +114,6 @@ const Word = (props) => {
         }
       )}).sort((a,b) => a.versId > b.versId ? 1 : -1)
     )
-    if (props.data.gnt.allLexns.edges[0].node.lexnId !== lexnIdLastVisited){
-      dispatch(clearWordState())
-      dispatch(setLexnIdLastVisited(props.data.gnt.allLexns.edges[0].node.lexnId))
-    }
-
   },[])
 
   useEffect(() => {
@@ -113,10 +121,8 @@ const Word = (props) => {
     dispatch(toggleExpandAllVerses(false))
   },[])
 
-  /*************************************************************************/
-  // LOGIC
-  /*************************************************************************/
-  let pdgmF = pdgm && pdgm.filter(item => 
+  useEffect(() => {
+   setPdgmF(pdgm && pdgm.filter(item => 
     (parsTense === '*' | item.node.pdgmPars.parsTense === parsTense) &
     (parsVoice === '*' | item.node.pdgmPars.parsVoice === parsVoice) &
     (parsMood === '*' | item.node.pdgmPars.parsMood === parsMood) &
@@ -124,15 +130,31 @@ const Word = (props) => {
     (parsCase === '*' | item.node.pdgmPars.parsCase === parsCase) &
     (parsGender === '*' | item.node.pdgmPars.parsGender === parsGender) &
     (parsNumber === '*' | item.node.pdgmPars.parsNumber === parsNumber) 
-  )  
+  )  )
+  },[pdgm, parsTense, parsVoice, parsMood, parsPerson, parsCase, parsGender, parsNumber])
+
+  useEffect(() => {
+    dispatch(setParsIds(pdgmF && pdgmF.map(item => item.node.pdgmPars.parsId)))
+  },[pdgmF])
+
+  const handleClickVerse = (e, verse) => {    
+    dispatch(setScrollPosition(e.pageY-e.screenY*0.40))
+    navigate(`/${verse.versChapUrl}`)
+  }
+  
+
+
+  /*************************************************************************/
+  // LOGIC
+  /*************************************************************************/
 
   // filter verses by pars selection and book selection
-  const parsIds = pdgmF && pdgmF.map(item => item.node.pdgmPars.parsId)    
+  // const parsIds = pdgmF && pdgmF.map(item => item.node.pdgmPars.parsId)    
   let versesF;
   let counts;  
   let frlb = []
 
-  if (lexn) {
+  if (lexn && pdgm && verses && parsIds) {
     versesF = verses.filter(verse => parsIds.includes(verse.parsId))
     
     counts = versesF.reduce((p, c) => {      
@@ -163,7 +185,7 @@ const Word = (props) => {
   /*************************************************************************/
   // JSX
   /*************************************************************************/
-  if(lexn && pdgm) {return (
+  if(versesF) {return (
     <Layout>
       <div className={`max-w-[800px]`}>
       
@@ -288,7 +310,7 @@ const Word = (props) => {
         {/* verses on bar click */}
         <div className={`mx-2 mt-8`}>
           {versesF.map((verse,key) => (
-            <div key={key} className={`my-6`} onClick={() => navigate(`/${verse.versChapUrl}`)}>
+            <div key={key} className={`my-6`} onClick={(e) => handleClickVerse(e,verse)}>              
               <VerseCard verse={verse} lexnId={lexn.lexnId} open={expandAllVerses} expandable={false}/>
             </div>
           ))}      
@@ -311,6 +333,5 @@ const Word = (props) => {
   }
   
   export default Word
-  
   
   

@@ -14,7 +14,7 @@ const initialState = {
     showParsId: false,    
     showLexnId: false,
     showGreekColor: false,  
-    expandAllVerses: false,  
+    expandAllVerses: true,  
 }
 
 const verseCardReducer = (state = initialState, action) => {

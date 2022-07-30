@@ -1,4 +1,4 @@
-module.exports = {  
+module.exports = {    
     plugins: [    
       'gatsby-plugin-postcss',
       {
@@ -14,7 +14,7 @@ module.exports = {
         options: {        
           typeName: "gnt",        
           fieldName: "gnt",        
-          url: "http://0.0.0.0:5000/graphql/",                 
+          url: "http://127.0.0.1:5000/graphql/",                 
         },
       },    
     ],

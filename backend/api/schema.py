@@ -73,13 +73,13 @@ class PdgmNode(DjangoObjectType):
 
                          
 class Query(graphene.ObjectType):    
-    allWords = DjangoFilterConnectionField(WordNode)
-    allLexns = DjangoFilterConnectionField(LexnNode)
-    allParss = DjangoFilterConnectionField(ParsNode)    
-    allBooks = DjangoFilterConnectionField(BookNode)    
-    allChaps = DjangoFilterConnectionField(ChapNode)    
-    allVerss = DjangoFilterConnectionField(VersNode)   
-    allPdgms = DjangoFilterConnectionField(PdgmNode)
+    allWords = DjangoFilterConnectionField(WordNode, max_limit=None)
+    allLexns = DjangoFilterConnectionField(LexnNode, max_limit=None)
+    allParss = DjangoFilterConnectionField(ParsNode, max_limit=None)
+    allBooks = DjangoFilterConnectionField(BookNode, max_limit=None)
+    allChaps = DjangoFilterConnectionField(ChapNode, max_limit=None)
+    allVerss = DjangoFilterConnectionField(VersNode, max_limit=None)
+    allPdgms = DjangoFilterConnectionField(PdgmNode, max_limit=None)
 
     
 

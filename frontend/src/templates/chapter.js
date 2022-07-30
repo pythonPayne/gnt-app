@@ -55,10 +55,22 @@ query($chapId: String!){
 
 `
 
-const Chapter = (props) => {
+const Chapter = (props) => {  
   const dispatch = useDispatch()
   const expandAllVerses = useSelector(state => state.verseCard.expandAllVerses)
   const data = props.data
+
+  useEffect(() => {
+    
+    if (!props.location.hash) return;
+    
+    window.requestAnimationFrame(() => {
+      const anchor = document.querySelector(props.location.hash);
+      const offset = anchor.getBoundingClientRect().top + window.scrollY;
+      window.scroll({ top: offset, left: 0 });
+    });
+  
+  },[])
 
   useEffect(() => {
     dispatch(toggleShowMenu(false))
@@ -71,6 +83,7 @@ const Chapter = (props) => {
   return (
     <>    
     <Layout>
+
       <div className={`flex items-center justify-center h-[12vh] bg-white border-b text-xl mb-8`}>
         {chap.chapBook.bookName} {parseInt(chap.chapId.slice(2,4))}
       </div>
@@ -83,6 +96,9 @@ const Chapter = (props) => {
           </div>
         ))}      
       </div>
+
+      <div className={`min-h-[30vh]`}></div>
+
     </Layout>
   </>
   )

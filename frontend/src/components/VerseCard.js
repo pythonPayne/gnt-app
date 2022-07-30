@@ -2,7 +2,6 @@ import React, {useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'gatsby'
 import { useDispatch } from 'react-redux'
-import { clearWordState } from '../redux/actions/word'
 
 const VerseCard = (props) => {  
   const {verse, expandable} = props    
@@ -15,6 +14,7 @@ const VerseCard = (props) => {
   const showLexnId = useSelector(state => state.verseCard.showLexnId)
   const showGreekColor = useSelector(state => state.verseCard.showGreekColor)
   const lexnIdLastVisited = useSelector(state => state.word.lexnIdLastVisited)  
+  const parsIds = useSelector(state => state.word.parsIds)  
   
   useEffect(() => {
     setCardExpanded(props.open)
@@ -35,7 +35,7 @@ const VerseCard = (props) => {
 
             <Link to={`/word-${w.node.wordLexn.lexnId}`} key={i}             
             className={`flex flex-col mr-1 mb-1 p-1
-            ${w.node.wordLexn.lexnId === lexnIdLastVisited && "border-2 border-black"}`}>
+            ${w.node.wordLexn.lexnId === lexnIdLastVisited && parsIds.includes(w.node.wordPars.parsId) && "border-2 border-black"}`}>
 
               {showGreek &&
                 <div className={`p-1 text-sm

@@ -1,6 +1,7 @@
 import {
     SET_BOOK,
     SET_SECTION_SHOWING,
+    SET_PARS_IDS,
     SET_PARS_TENSE,
     SET_PARS_VOICE,
     SET_PARS_MOOD,
@@ -9,13 +10,14 @@ import {
     SET_PARS_GENDER,
     SET_PARS_NUMBER,  
     SET_LEXN_ID_LAST_VISITED,  
+    SET_SCROLL_POSITION,
     CLEAR_WORD_STATE,
-
 } from "../types"
 
 const initialState = {    
     book: '',    
     sectionShowing: 'lexicon',
+    parsIds: null,
     parsTense: '*',
     parsVoice: '*',
     parsMood: '*',
@@ -23,13 +25,15 @@ const initialState = {
     parsCase: '*',
     parsGender: '*',
     parsNumber: '*',
-    lexnIdLastVisited: null,
+    scrollPosition: 0,
+    lexnIdLastVisited: null,        
 }
 
 const wordReducer = (state = initialState, action) => {
     switch (action.type) {        
         case SET_BOOK: return {...state, book: action.payload}
         case SET_SECTION_SHOWING: return {...state, sectionShowing: action.payload}
+        case SET_PARS_IDS: return {...state, parsIds: action.payload}
         case SET_PARS_TENSE: return {...state, parsTense: action.payload}
         case SET_PARS_VOICE: return {...state, parsVoice: action.payload}
         case SET_PARS_MOOD: return {...state, parsMood: action.payload}
@@ -38,6 +42,7 @@ const wordReducer = (state = initialState, action) => {
         case SET_PARS_GENDER: return {...state, parsGender: action.payload}
         case SET_PARS_NUMBER: return {...state, parsNumber: action.payload}
         case SET_LEXN_ID_LAST_VISITED: return {...state, lexnIdLastVisited: action.payload}
+        case SET_SCROLL_POSITION: return {...state, scrollPosition: action.payload}
         case CLEAR_WORD_STATE: return initialState
         
         default:

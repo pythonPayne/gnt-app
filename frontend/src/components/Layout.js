@@ -67,7 +67,7 @@ const Layout = (props) => {
 
 
         {/* side menu */}
-        <div className={`fixed bottom-0 right-0 bg-black min-h-screen z-10 shadow-2xl overflow-y-scroll no-scrollbar
+        <div className={`fixed bottom-0 right-0 bg-black min-h-screen z-10 shadow-2xl overflow-y-scroll no-scrollbar max-w-[500px]
         ${showMenu ? "w-[50vw]" : "w-0"}
         `}
         >

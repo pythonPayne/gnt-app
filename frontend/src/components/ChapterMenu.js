@@ -39,9 +39,9 @@ const ChapterMenu = () => {
             </div>
 
             {sameBook &&
-            <div className={`grid grid-cols-3`}>
+            <div className={`grid grid-cols-3 mt-2`}>
                 {chs.map(ch => (
-                    <Link key={ch} to={`/${book.node.bookNameAbbrev}-${ch}`} className={`px-3 py-2 text-white`}>
+                    <Link key={ch} to={`/${book.node.bookNameAbbrev}-${ch}`} className={`text-center px-2 py-2 text-white hover:border hover:rounded-full`}>
                         {ch}
                     </Link>
                 ))}

@@ -59,11 +59,11 @@ const Carousel = (props) => {
   
   return (
     <React.Fragment>
-      <div className={`flex flex-col w-[45px]`}>
+      <div className={`flex flex-col w-[45px] text-gray-600`}>
         <div className={`flex justify-center items-center`}>{parsLabel}</div>
 
         <div className={`relative flex flex-col border h-[45px] w-[45px] snap-y snap-mandatory no-scrollbar
-        ${itemsF.length === 0 ? "bg-gray-200 text-gray-200 overflow-hidden" : "bg-white overflow-y-scroll"}`} id={"parsContainer-"+parsLabel}>
+        ${itemsF.length === 0 ? "bg-gray-300 text-gray-300 overflow-hidden" : "bg-white overflow-y-scroll"}`} id={"parsContainer-"+parsLabel}>
           {['*', ...items].map((item, i) => (
               <div key={i} className={`flex items-center justify-center snap-center min-w-full min-h-full`} ref={addNode} id={"parsItem-"+parsLabel+"-"+item} >
                 {item}

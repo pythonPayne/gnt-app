@@ -50,9 +50,8 @@ query($chapId: String!){
         }
       }
     }
-    }
   }
-
+}
 `
 
 const Chapter = (props) => {  
@@ -80,27 +79,29 @@ const Chapter = (props) => {
   const chap = data.gnt.allChaps.edges[0].node
   const verses = chap.vers.edges  
   
-  return (
-    <>    
+  return (  
     <Layout>
 
-      <div className={`flex items-center justify-center h-[12vh] bg-white border-b text-xl mb-8`}>
-        {chap.chapBook.bookName} {parseInt(chap.chapId.slice(2,4))}
-      </div>
-      
-      {/* VERSES */}
-      <div className={`mx-2`}>
-        {verses.map((verse,key) => (
-          <div key={key} className={`my-6`} id={`${verse.node.versChapUrl.split('#')[1]}`}>          
-            <VerseCard verse={verse.node} lexnId={'0'} open={expandAllVerses} expandable={true}/>
-          </div>
-        ))}      
-      </div>
+      <div className={`bg-gray-50`}>
 
-      <div className={`min-h-[30vh]`}></div>
+        <div className={`flex items-center justify-center h-[12vh] text-3xl text-gray-500 tracking-wide mb-2`}>
+          {chap.chapBook.bookName} {parseInt(chap.chapId.slice(2,4))}
+        </div>
+        
+        {/* VERSES */}
+        <div className={`mx-2`}>
+          {verses.map((verse,key) => (
+            <div key={key} className={`mb-6`} id={`${verse.node.versChapUrl.split('#')[1]}`}>          
+              <VerseCard verse={verse.node} lexnId={'0'} open={expandAllVerses} />
+            </div>
+          ))}      
+        </div>
+
+        <div className={`min-h-[30vh]`}></div>
+
+      </div>
 
     </Layout>
-  </>
   )
 }
 

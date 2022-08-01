@@ -10,6 +10,7 @@ import {
     SET_PARS_GENDER,
     SET_PARS_NUMBER,  
     SET_LEXN_ID_LAST_VISITED,  
+    SET_LEXN_GREEK_LAST_VISITED,  
     SET_SCROLL_POSITION,
     CLEAR_WORD_STATE,
 } from "../types"
@@ -26,7 +27,8 @@ const initialState = {
     parsGender: '*',
     parsNumber: '*',
     scrollPosition: 0,
-    lexnIdLastVisited: null,        
+    lexnIdLastVisited: null,     
+    lexnGreekLastVisited: null,        
 }
 
 const wordReducer = (state = initialState, action) => {
@@ -42,6 +44,7 @@ const wordReducer = (state = initialState, action) => {
         case SET_PARS_GENDER: return {...state, parsGender: action.payload}
         case SET_PARS_NUMBER: return {...state, parsNumber: action.payload}
         case SET_LEXN_ID_LAST_VISITED: return {...state, lexnIdLastVisited: action.payload}
+        case SET_LEXN_GREEK_LAST_VISITED: return {...state, lexnGreekLastVisited: action.payload}
         case SET_SCROLL_POSITION: return {...state, scrollPosition: action.payload}
         case CLEAR_WORD_STATE: return initialState
         

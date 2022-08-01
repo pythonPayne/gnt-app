@@ -4,7 +4,7 @@ import { Link } from 'gatsby'
 import { useDispatch } from 'react-redux'
 
 const VerseCard = (props) => {  
-  const {verse, expandable} = props    
+  const { verse } = props    
   const dispatch = useDispatch()
   const [cardExpanded, setCardExpanded] = useState(props.open)
   
@@ -21,33 +21,34 @@ const VerseCard = (props) => {
   },[props])
 
     return (
-      <div className={`mb-8 shadow-md border`}>   
+      <div className={`mb-8 shadow-md`}>   
 
-        <div className={`p-2 bg-gray-100 text-gray-800 border-b
-        ${expandable && "cursor-pointer"}`}
+        <div className={`p-2 bg-gray-300 bg-opacity-10 text-gray-500 font-semibold border-gray-300 cursor-pointer
+        border-l-2 border-r-2 border-t-2
+        ${!cardExpanded && "border-b-2"}`}
         onClick={() => setCardExpanded(!cardExpanded)}>
           {verse.versRefAbbrev}
         </div>          
 
-        {cardExpanded && expandable &&
-        <div className={`flex flex-wrap p-1`}>
+        {cardExpanded &&
+        <div className={`flex flex-wrap p-1 bg-white text-gray-700 ring-2 ring-inset ring-gray-300`}>
           {verse.word.edges.map((w,i) => (
 
             <Link to={`/word-${w.node.wordLexn.lexnId}`} key={i}             
             className={`flex flex-col mr-1 mb-1 p-1
-            ${w.node.wordLexn.lexnId === lexnIdLastVisited && parsIds.includes(w.node.wordPars.parsId) && "border-2 border-black"}`}>
+            ${w.node.wordLexn.lexnId === lexnIdLastVisited && parsIds.includes(w.node.wordPars.parsId) && "ring-2 ring-inset ring-gray-400"}`}>
 
               {showGreek &&
-                <div className={`p-1 text-sm
-                ${(showGreekColor && w.node.wordPars.parsFunction === "V") && "bg-yellow-100"}
-                ${(showGreekColor && w.node.wordPars.parsFunction === "NOUN") && "bg-red-100"}
-                ${(showGreekColor && w.node.wordPars.parsFunction === "ADJ") && "bg-blue-100"}
-                ${(showGreekColor && w.node.wordPars.parsFunction === "CONJ") && "bg-purple-100"}
-                ${(showGreekColor && w.node.wordPars.parsFunction === "ART") && "bg-gray-100"}
-                ${(showGreekColor && w.node.wordPars.parsFunction === "PRON") && "bg-red-100"}
-                ${(showGreekColor && w.node.wordPars.parsFunction === "PREP") && "bg-green-100"}
-                ${(showGreekColor && w.node.wordPars.parsFunction === "PRT") && "bg-gray-100"}
-                ${(showGreekColor && w.node.wordPars.parsFunction === "ADV") && "bg-gray-100"}
+                <div className={`p-1 text-md
+                ${(showGreekColor && w.node.wordPars.parsFunction === "V") && "bg-yellow-200 bg-opacity-60"}
+                ${(showGreekColor && w.node.wordPars.parsFunction === "NOUN") && "bg-red-200 bg-opacity-60"}
+                ${(showGreekColor && w.node.wordPars.parsFunction === "ADJ") && "bg-blue-200 bg-opacity-60"}
+                ${(showGreekColor && w.node.wordPars.parsFunction === "CONJ") && "bg-purple-200 bg-opacity-60"}
+                ${(showGreekColor && w.node.wordPars.parsFunction === "ART") && "bg-gray-200 bg-opacity-60"}
+                ${(showGreekColor && w.node.wordPars.parsFunction === "PRON") && "bg-red-200 bg-opacity-60"}
+                ${(showGreekColor && w.node.wordPars.parsFunction === "PREP") && "bg-green-200 bg-opacity-60"}
+                ${(showGreekColor && w.node.wordPars.parsFunction === "PRT") && "bg-gray-200 bg-opacity-60"}
+                ${(showGreekColor && w.node.wordPars.parsFunction === "ADV") && "bg-gray-200 bg-opacity-60"}
                 `}                
                 >
                   {w.node.wordGreek}              

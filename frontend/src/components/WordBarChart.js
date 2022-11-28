@@ -15,7 +15,7 @@ const WordBarChart = ({frlb, book }) => {
         return (
         <div className={`flex h-full text-gray-500`}>
             <div className={`w-20 h-full flex flex-col-reverse mr-3`}>
-                <div className={`h-[15%] flex justify-center font-semibold tracking-wide hover:font-semibold cursor-pointer`} 
+                <div className={`h-[15%] flex justify-center font-bold tracking-wide cursor-pointer`} 
                 onClick={() => dispatch(setBook(barBook === book ? '' : barBook))}>
                     {barBook}
                 </div>
@@ -23,7 +23,7 @@ const WordBarChart = ({frlb, book }) => {
                 style={{height: `${h}%`}}
                 onClick={() => dispatch(setBook(barBook === book ? '' : barBook))}>
                 </div>
-                <div className={`h-[15%] flex justify-center items-center pb-1 font-semibold`}>
+                <div className={`h-[15%] flex justify-center items-center pb-1 font-bold`}>
                     {barCount}
                 </div>
             </div>          

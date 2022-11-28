@@ -3,7 +3,7 @@ import { graphql, Link, navigate } from "gatsby"
 import { useSelector, useDispatch } from "react-redux"
 import Layout from "../components/Layout"
 import WordBarChart from "../components/WordBarChart"
-import { toggleShowMenu } from "../redux/actions/layout"
+import { toggleShowMenu, setTemplate } from "../redux/actions/layout"
 import { toggleExpandAllVerses } from "../redux/actions/verseCard"
 import { setSectionShowing, setLexnIdLastVisited, clearWordState, setParsIds, setScrollPosition, setLexnGreekLastVisited } from "../redux/actions/word"
 import Carousel from "../components/Carousel"
@@ -117,6 +117,7 @@ const Word = (props) => {
   },[])
 
   useEffect(() => {
+    dispatch(setTemplate('word'))
     dispatch(toggleShowMenu(false))
     dispatch(toggleExpandAllVerses(false))
   },[])
@@ -142,8 +143,6 @@ const Word = (props) => {
     navigate(`/${verse.versChapUrl}`)
   }
   
-
-
   /*************************************************************************/
   // LOGIC
   /*************************************************************************/
@@ -200,20 +199,20 @@ const Word = (props) => {
       <div className="sticky top-0 bg-gray-50">
          <div className={`grid grid-cols-3 gap-x-3 py-4 mx-3`}>
           
-            <div className={`flex justify-center py-2 cursor-pointer
-            ${sectionShowing === 'lexicon' ? "bg-blue-100 text-gray-700 shadow" : "text-gray-500"}`}
+            <div className={`flex justify-center py-2 cursor-pointer uppercase tracking-wide font-bold border rounded
+            ${sectionShowing === 'lexicon' ? "bg-blue-500 text-gray-100 shadow-lg" : "text-gray-300"}`}
             onClick={() => dispatch(setSectionShowing('lexicon'))}>
               Lexicon
             </div>
 
-            <div className={`flex justify-center py-2 cursor-pointer
-            ${sectionShowing === 'usage' ? "bg-blue-100 text-gray-700 shadow" : "text-gray-500"}`}
+            <div className={`flex justify-center py-2 cursor-pointer uppercase tracking-wide font-bold border rounded
+            ${sectionShowing === 'usage' ? "bg-blue-500 text-gray-100 shadow-lg" : "text-gray-300"}`}
             onClick={() => dispatch(setSectionShowing('usage'))}>
               Usage
             </div>            
   
-            <div className={`flex justify-center py-2 cursor-pointer
-            ${sectionShowing === 'parsing' ? "bg-blue-100 text-gray-700 shadow" : "text-gray-500"}`}
+            <div className={`flex justify-center py-2 cursor-pointer uppercase tracking-wide font-bold border rounded
+            ${sectionShowing === 'parsing' ? "bg-blue-500 text-gray-100 shadow-lg" : "text-gray-300"}`}
             onClick={() => dispatch(setSectionShowing('parsing'))}>                          
               {(parsTense === "*" & parsVoice === "*" & parsMood === "*" & parsPerson === "*" &
               parsCase === "*" & parsGender === "*" & parsNumber === "*")
@@ -238,25 +237,37 @@ const Word = (props) => {
   
       {/* lexicon section */}
       {sectionShowing === 'lexicon' &&
-      <div className={`mx-2 mt-6 min-h-screen pb-24`}>      
-          <div className={`flex flex-col space-y-10 p-3`}>  
-          <div className={`grid grid-cols-2 gap-y-4 gap-x-8`}>
-            <div className={`text-right pr-4`}>ID</div>
-            <div>{lexn.lexnId}</div>
-            <div className={`text-right pr-4`}># in NT</div>
-            <div>{lexn.lexnFreqNt}</div>
-            <div className={`text-right pr-4`}>Greek</div>          
-            <div>{lexn.lexnGreekLong}</div>          
-            <div className={`text-right pr-4`}>Function</div>
-            <div>{lexn.lexnFunction}</div>
-            <div className={`text-right pr-4`}>Transliteration</div>
-            <div>{lexn.lexnTransliteration}</div>            
-            <div className={`text-right pr-4`}>Gloss</div>
-            <div>{lexn.lexnGloss}</div>
-            <div className={`text-right pr-4`}>Translation</div>          
-            <div>{lexn.lexnDefinition}</div>                        
-          </div>                   
-        </div>
+      <div className={`flex justify-center items-start mx-4 mt-6 min-h-screen pb-24`}>                
+          <div className={`grid grid-cols-2 gap-y-4 gap-x-8 text-lg`}>
+            <div className={`flex justify-end items-start`}>
+              <div className={`text-right font-bold border-b-[1px] border-gray-500`}>Greek:</div>
+            </div>
+            <div className={`text-gray-500`}>{lexn.lexnGreekLong}</div>          
+            <div className={`flex justify-end items-start`}>
+              <div className={`text-right font-bold border-b-[1px] border-gray-500`}>Transliteration:</div>
+            </div>
+            <div className={`text-gray-500`}>{lexn.lexnTransliteration}</div>            
+            <div className={`flex justify-end items-start`}>
+              <div className={`text-right font-bold border-b-[1px] border-gray-500`}>Function:</div>
+            </div>
+            <div className={`text-gray-500`}>{lexn.lexnFunction}</div>
+            <div className={`flex justify-end items-start`}>
+              <div className={`text-right font-bold border-b-[1px] border-gray-500`}>Gloss:</div>
+            </div>
+            <div className={`text-gray-500`}>{lexn.lexnGloss}</div>
+            <div className={`flex justify-end items-start`}>
+              <div className={`text-right font-bold border-b-[1px] border-gray-500`}>Translation:</div>
+            </div>          
+            <div className={`text-gray-500`}>{lexn.lexnDefinition}</div>                        
+            <div className={`flex justify-end items-start`}>
+              <div className={`text-right font-bold border-b-[1px] border-gray-500`}># in NT:</div>
+            </div>
+            <div className={`text-gray-500`}>{lexn.lexnFreqNt}</div>
+            <div className={`flex justify-end items-start`}>
+              <div className={`text-right font-bold border-b-[1px] border-gray-500`}>ID:</div>
+            </div>
+            <div className={`text-gray-500`}>{lexn.lexnId}</div>
+          </div>                           
       </div>
       }
   
@@ -269,9 +280,9 @@ const Word = (props) => {
         </div>
   
         {/* verses on bar click */}
-        <div className={`mx-2 mt-4 grid grid-cols-3 gap-y-2 gap-x-2`}>
+        <div className={`mx-2 mt-4 grid grid-cols-3 md:grid-cols-5 lg:grid-cols-8 gap-y-2 gap-x-2`}>
           {versesF.map((verse,key) => (
-            <div key={key} className={`p-2 border cursor-pointer bg-gray-100 text-gray-600 text-sm shadow hover:bg-blue-100`} onClick={(e) => handleClickVerse(e,verse)}>              
+            <div key={key} className={`p-2 border cursor-pointer text-gray-600 text-xs shadow-sm hover:bg-blue-100 ring-1 ring-blue-100`} onClick={(e) => handleClickVerse(e,verse)}>              
               {verse.versRefAbbrev}
             </div>
           ))}      

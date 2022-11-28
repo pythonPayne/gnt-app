@@ -1,6 +1,7 @@
 // layout
 export const SHOW_MENU = "SHOW_MENU"
 export const SHOW_SETTINGS = "SHOW_SETTINGS"
+export const SET_TEMPLATE = "SET_TEMPLATE"
 // verseCard
 export const SHOW_GREEK = "SHOW_GREEK"
 export const SHOW_ENGLISH = "SHOW_ENGLISH"

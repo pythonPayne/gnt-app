@@ -22,6 +22,7 @@ const Layout = (props) => {
 
   const showMenu = useSelector(state => state.layout.showMenu)
   const showSettings = useSelector(state => state.layout.showSettings)  
+  const template = useSelector(state => state.layout.template)  
 
   const showGreek = useSelector(state => state.verseCard.showGreek)
   const showEnglish = useSelector(state => state.verseCard.showEnglish)
@@ -40,9 +41,9 @@ const Layout = (props) => {
         </div>
       )
   }
-
+  
   return (
-    <div className={`max-w-[500px] container mx-auto no-scrollbar`}>
+    <div className={`max-w-[768px] container mx-auto no-scrollbar`}>
     
         {/* menu button  */}
         <div className={`bg-blue-500 text-white rounded-full fixed bottom-7 right-7 z-20`}>
@@ -52,13 +53,13 @@ const Layout = (props) => {
             >
                 <div className={`transition-all duration-200 bg-white
                     ${showMenu 
-                        ? "w-1 h-16 rotate-45 translate-y-[1.175rem] rounded-lg" 
+                        ? "w-1 h-16 rotate-45 translate-y-[1.18rem] rounded-lg" 
                         : "h-1 w-8"                
                     }`}>                
                 </div>
                 <div className={`transition-all duration-200 bg-white
                     ${showMenu 
-                        ? "w-1 h-16 -rotate-45 -translate-y-[1.175rem] rounded-lg" 
+                        ? "w-1 h-16 -rotate-45 -translate-y-[1.18rem] rounded-lg" 
                         : "h-1 w-8"
                     }`}>                    
                 </div>
@@ -88,7 +89,9 @@ const Layout = (props) => {
                         {settingsItem(showGreekColor, toggleShowGreekColor, "Show Colors")}
                         {settingsItem(expandAllVerses, toggleExpandAllVerses, "Expand All Verses")}
                     </div>
-
+                
+                    {template !== 'word' &&
+                    <>
                     <div className={`pl-4 text-lg text-blue-300 border-b uppercase py-3`}>Word Settings</div>
                     <div className={`flex flex-col space-y-4 text-white pt-3 pb-9`}>                     
                         {lexnGreekLastVisited
@@ -98,7 +101,8 @@ const Layout = (props) => {
                         <div className={`pl-6 text-gray-500`}>Click a word first</div>
                         }
                     </div>
-
+                    </>
+                    }
                 </div>
             </div>                        
             :
@@ -115,7 +119,7 @@ const Layout = (props) => {
 
                 {!showSettings &&
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"
-                className={`h-16 w-16 stroke-white animate-spin-slow cursor-pointer flex justify-center items-center`} 
+                className={`h-16 w-16 stroke-white animate-spin-slow cursor-pointer flex justify-center items-center fill-gray-900`} 
                 onClick={() => dispatch(toggleShowSettings(!showSettings))}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                     <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />

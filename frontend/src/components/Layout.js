@@ -1,6 +1,10 @@
 import React, { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
-import { toggleShowMenu, toggleShowSettings } from "../redux/actions/layout"
+import {
+  toggleShowMenu,
+  toggleShowSettings,
+  setDark,
+} from "../redux/actions/layout"
 import {
   toggleShowGreek,
   toggleShowEnglish,
@@ -18,6 +22,7 @@ const Layout = (props) => {
   const showMenu = useSelector((state) => state.layout.showMenu)
   const showSettings = useSelector((state) => state.layout.showSettings)
   const template = useSelector((state) => state.layout.template)
+  const dark = useSelector((state) => state.layout.dark)
 
   const showGreek = useSelector((state) => state.verseCard.showGreek)
   const showEnglish = useSelector((state) => state.verseCard.showEnglish)
@@ -76,7 +81,8 @@ const Layout = (props) => {
 
       {/* side menu */}
       <div
-        className={`fixed top-0 right-0 bg-gray-800 min-h-screen z-10 overflow-auto max-w-[300px] no-scrollbar
+        className={`fixed top-0 right-0 min-h-screen z-10 overflow-auto max-w-[300px] no-scrollbar        
+        ${dark ? "bg-gray-900" : "bg-gray-800"}
         ${showMenu ? "w-[50vw]" : "w-0"}
         `}
       >
@@ -84,7 +90,7 @@ const Layout = (props) => {
           <div className={`relative`}>
             <div className={`absolute pb-[50vh] w-full`}>
               <div
-                className={`pl-4 text-lg text-blue-300 border-b uppercase py-3`}
+                className={`pl-4 text-lg text-blue-300 border-b py-3 uppercase`}
               >
                 Verse Settings
               </div>
@@ -130,6 +136,19 @@ const Layout = (props) => {
                   </div>
                 </>
               )}
+              <div
+                className={`pl-4 text-lg text-blue-300 border-b uppercase py-3`}
+              >
+                Display Settings
+              </div>
+              <div
+                className={`pl-6 pt-3 text-md cursor-pointer focus:outline-none
+                ${dark ? "text-red-300" : "text-gray-600"}
+                `}
+                onClick={() => dispatch(setDark(!dark))}
+              >
+                Dark mode
+              </div>
             </div>
           </div>
         ) : (
@@ -179,7 +198,9 @@ const Layout = (props) => {
               )}
             </div>
             <div
-              className={`fixed bottom-0 h-24 w-full bg-gray-800 z-10`}
+              className={`fixed bottom-0 h-24 w-full z-10
+              ${dark ? "bg-gray-900" : "bg-gray-800"}
+              `}
             ></div>
           </>
         )}

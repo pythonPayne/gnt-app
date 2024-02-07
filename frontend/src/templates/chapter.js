@@ -34,6 +34,8 @@ export const query = graphql`
                         wordEnglish
                         wordLexn {
                           lexnId
+                          lexnGreek
+                          lexnFreqNt
                         }
                         wordPars {
                           parsId
@@ -64,6 +66,7 @@ const Chapter = (props) => {
   const expandAllVerses = useSelector(
     (state) => state.verseCard.expandAllVerses
   )
+  const dark = useSelector((state) => state.layout.dark)
   const data = props.data
 
   useEffect(() => {
@@ -88,16 +91,22 @@ const Chapter = (props) => {
 
   return (
     <Layout>
-      <div className={`flex justify-center bg-gray-50`}>
+      <div
+        className={`flex justify-center
+      ${dark ? "bg-gray-800" : "bg-gray-50"}
+      `}
+      >
         <div className={`max-w-[1100px]`}>
           <div
-            className={`flex items-center justify-center h-[12vh] text-3xl text-gray-500 tracking-wide mb-2`}
+            className={`flex items-center justify-center h-[12vh] text-3xl tracking-wide mb-2 font-serif
+            ${dark ? "text-gray-300" : "text-gray-500"}
+            `}
           >
             {chap.chapBook.bookName} {parseInt(chap.chapId.slice(2, 4))}
           </div>
 
           {/* VERSES */}
-          <div className={`mx-2`}>
+          <div className={`mx-2 ${!expandAllVerses && "w-[95vw] lg:w-[85vw]"}`}>
             {verses.map((verse, key) => (
               <div
                 key={key}

@@ -59,7 +59,9 @@ exports.createPages = ({ actions }) => {
   })
 
   const lexnIds = [...Array(5390).keys()].map((n) => ("000" + n).slice(-4))
-  // const lexnIds = [...Array(5390).keys()].slice(1,101).map(n => ("000" + n).slice(-4))
+  // const lexnIds = [...Array(5390).keys()]
+  //   .slice(1, 10)
+  //   .map((n) => ("000" + n).slice(-4))
   lexnIds.forEach((lexnId) => {
     actions.createPage({
       path: "word-" + lexnId,

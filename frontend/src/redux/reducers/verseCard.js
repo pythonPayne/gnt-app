@@ -12,7 +12,7 @@ const initialState = {
   showEnglish: true,
   showParsId: true,
   showLexnId: true,
-  showGreekColor: true,
+  showGreekColor: false,
   expandAllVerses: true,
 }
 

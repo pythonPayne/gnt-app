@@ -57,6 +57,16 @@ export const query = graphql`
                             versRefAbbrev
                             versChapUrl
                             versId
+                            word {
+                              edges {
+                                node {
+                                  wordId
+                                  wordGreek
+                                  wordEnglish
+                                  wordLexnIdCopy
+                                }
+                              }
+                            }
                           }
                         }
                       }
@@ -77,6 +87,7 @@ const Word = (props) => {
   const expandAllVerses = useSelector(
     (state) => state.verseCard.expandAllVerses
   )
+  const dark = useSelector((state) => state.layout.dark)
 
   const book = useSelector((state) => state.word.book)
   const sectionShowing = useSelector((state) => state.word.sectionShowing)
@@ -95,6 +106,9 @@ const Word = (props) => {
   const [pdgm, setPdgm] = useState(null)
   const [pdgmF, setPdgmF] = useState(null)
   const [verses, setVerses] = useState(null)
+
+  const [verseClicked, setVerseClicked] = useState(false)
+  const [verseClickedRef, setVerseClickedRef] = useState(null)
 
   useEffect(() => {
     if (props.data.gnt.allLexns.edges[0].node.lexnId !== lexnIdLastVisited) {
@@ -130,6 +144,7 @@ const Word = (props) => {
             versRefAbbrev: edge.node.wordVers.versRefAbbrev,
             versId: edge.node.wordVers.versId,
             versChapUrl: edge.node.wordVers.versChapUrl,
+            verseWord: edge.node.wordVers.word.edges,
           }
         })
         .sort((a, b) => (a.versId > b.versId ? 1 : -1))
@@ -179,8 +194,10 @@ const Word = (props) => {
   }, [pdgmF])
 
   const handleClickVerse = (e, verse) => {
-    dispatch(setScrollPosition(e.pageY - e.screenY * 0.4))
-    navigate(`/${verse.versChapUrl}`)
+    // dispatch(setScrollPosition(e.pageY - e.screenY * 0.4))
+    // navigate(`/${verse.versChapUrl}`)
+    setVerseClicked(true)
+    setVerseClickedRef(versesF.filter((v) => v.versId === verse.versId)[0])
   }
 
   /*************************************************************************/
@@ -242,23 +259,36 @@ const Word = (props) => {
     return (
       <Layout>
         <div
-          className={`flex justify-center bg-gray-50 bg-opacity-100 text-gray-700 pb-96`}
+          className={`flex justify-center pb-96
+          ${
+            dark
+              ? "bg-gray-800 bg-opacity-100 text-gray-300"
+              : "bg-gray-50 bg-opacity-100 text-gray-700"
+          }
+          `}
         >
           <div className={`w-screen max-w-[1100px]`}>
             {/* word banner */}
-            <div>
+            <div className="">
               <div
-                className={`flex justify-center items-center h-[12vh] text-3xl text-gray-500`}
+                className={`flex justify-center items-center h-[12vh] text-3xl
+                ${dark ? "text-gray-300" : "text-gray-500"}
+                `}
               >
                 {lexn.lexnGreek}
               </div>
             </div>
 
             {/* horizontal menu */}
-            <div className="sticky top-0 bg-gray-50">
+            <div
+              className={`sticky top-0 bg-gray-50
+            ${dark ? "bg-gray-800" : "bg-gray-50"}
+            `}
+            >
               <div className={`grid grid-cols-3 gap-x-3 py-4 mx-3`}>
                 <div
-                  className={`flex justify-center py-2 cursor-pointer uppercase tracking-wide font-bold border rounded
+                  className={`flex justify-center py-2 cursor-pointer uppercase tracking-wide font-bold rounded
+                  ${dark ? "border border-gray-600" : "border"}
             ${
               sectionShowing === "lexicon"
                 ? "bg-blue-500 text-gray-100 shadow-lg"
@@ -270,7 +300,8 @@ const Word = (props) => {
                 </div>
 
                 <div
-                  className={`flex justify-center py-2 cursor-pointer uppercase tracking-wide font-bold border rounded
+                  className={`flex justify-center py-2 cursor-pointer uppercase tracking-wide font-bold rounded
+                  ${dark ? "border border-gray-600" : "border"}
             ${
               sectionShowing === "usage"
                 ? "bg-blue-500 text-gray-100 shadow-lg"
@@ -282,7 +313,8 @@ const Word = (props) => {
                 </div>
 
                 <div
-                  className={`flex justify-center py-2 cursor-pointer uppercase tracking-wide font-bold border rounded
+                  className={`flex justify-center py-2 cursor-pointer uppercase tracking-wide font-bold rounded
+                  ${dark ? "border border-gray-600" : "border"}
             ${
               sectionShowing === "parsing"
                 ? "bg-blue-500 text-gray-100 shadow-lg"
@@ -340,174 +372,301 @@ const Word = (props) => {
 
             {/* lexicon section */}
             {sectionShowing === "lexicon" && (
-              <div
-                className={`flex justify-center items-start mx-4 mt-6 min-h-screen pb-24`}
-              >
-                <div className={`grid grid-cols-2 gap-y-4 gap-x-8 text-lg`}>
-                  <div className={`flex justify-end items-start`}>
+              <div className="">
+                <div
+                  className={`min-h-screen flex justify-center items-start mx-4 mt-6 pb-24`}
+                >
+                  <div className={`grid grid-cols-2 gap-y-4 gap-x-8 text-lg`}>
+                    <div className={`flex justify-end items-start`}>
+                      <div
+                        className={`text-right font-bold border-b-[1px] border-gray-500`}
+                      >
+                        Greek:
+                      </div>
+                    </div>
                     <div
-                      className={`text-right font-bold border-b-[1px] border-gray-500`}
+                      className={`${dark ? "text-gray-400" : "text-gray-500"}`}
                     >
-                      Greek:
+                      {lexn.lexnGreekLong}
+                    </div>
+                    <div className={`flex justify-end items-start`}>
+                      <div
+                        className={`text-right font-bold border-b-[1px] border-gray-500`}
+                      >
+                        Transliteration:
+                      </div>
+                    </div>
+                    <div
+                      className={`${dark ? "text-gray-400" : "text-gray-500"}`}
+                    >
+                      {lexn.lexnTransliteration}
+                    </div>
+                    <div className={`flex justify-end items-start`}>
+                      <div
+                        className={`text-right font-bold border-b-[1px] border-gray-500`}
+                      >
+                        Function:
+                      </div>
+                    </div>
+                    <div
+                      className={`${dark ? "text-gray-400" : "text-gray-500"}`}
+                    >
+                      {lexn.lexnFunction}
+                    </div>
+                    <div className={`flex justify-end items-start`}>
+                      <div
+                        className={`text-right font-bold border-b-[1px] border-gray-500`}
+                      >
+                        Gloss:
+                      </div>
+                    </div>
+                    <div
+                      className={`${dark ? "text-gray-400" : "text-gray-500"}`}
+                    >
+                      {lexn.lexnGloss}
+                    </div>
+                    <div className={`flex justify-end items-start`}>
+                      <div
+                        className={`text-right font-bold border-b-[1px] border-gray-500`}
+                      >
+                        Translation:
+                      </div>
+                    </div>
+                    <div
+                      className={`${dark ? "text-gray-400" : "text-gray-500"}`}
+                    >
+                      {lexn.lexnDefinition}
+                    </div>
+                    <div className={`flex justify-end items-start`}>
+                      <div
+                        className={`text-right font-bold border-b-[1px] border-gray-500`}
+                      >
+                        # in NT:
+                      </div>
+                    </div>
+                    <div
+                      className={`${dark ? "text-gray-400" : "text-gray-500"}`}
+                    >
+                      {lexn.lexnFreqNt}
+                    </div>
+                    <div className={`flex justify-end items-start`}>
+                      <div
+                        className={`text-right font-bold border-b-[1px] border-gray-500`}
+                      >
+                        ID:
+                      </div>
+                    </div>
+                    <div
+                      className={`${dark ? "text-gray-400" : "text-gray-500"}`}
+                    >
+                      {lexn.lexnId}
                     </div>
                   </div>
-                  <div className={`text-gray-500`}>{lexn.lexnGreekLong}</div>
-                  <div className={`flex justify-end items-start`}>
-                    <div
-                      className={`text-right font-bold border-b-[1px] border-gray-500`}
-                    >
-                      Transliteration:
-                    </div>
-                  </div>
-                  <div className={`text-gray-500`}>
-                    {lexn.lexnTransliteration}
-                  </div>
-                  <div className={`flex justify-end items-start`}>
-                    <div
-                      className={`text-right font-bold border-b-[1px] border-gray-500`}
-                    >
-                      Function:
-                    </div>
-                  </div>
-                  <div className={`text-gray-500`}>{lexn.lexnFunction}</div>
-                  <div className={`flex justify-end items-start`}>
-                    <div
-                      className={`text-right font-bold border-b-[1px] border-gray-500`}
-                    >
-                      Gloss:
-                    </div>
-                  </div>
-                  <div className={`text-gray-500`}>{lexn.lexnGloss}</div>
-                  <div className={`flex justify-end items-start`}>
-                    <div
-                      className={`text-right font-bold border-b-[1px] border-gray-500`}
-                    >
-                      Translation:
-                    </div>
-                  </div>
-                  <div className={`text-gray-500`}>{lexn.lexnDefinition}</div>
-                  <div className={`flex justify-end items-start`}>
-                    <div
-                      className={`text-right font-bold border-b-[1px] border-gray-500`}
-                    >
-                      # in NT:
-                    </div>
-                  </div>
-                  <div className={`text-gray-500`}>{lexn.lexnFreqNt}</div>
-                  <div className={`flex justify-end items-start`}>
-                    <div
-                      className={`text-right font-bold border-b-[1px] border-gray-500`}
-                    >
-                      ID:
-                    </div>
-                  </div>
-                  <div className={`text-gray-500`}>{lexn.lexnId}</div>
                 </div>
               </div>
             )}
 
+            {/* usage section */}
             {sectionShowing === "usage" && (
-              <div className={`min-h-screen text-gray-600 bg-gray-50`}>
-                {/* bar chart */}
-                <div className={`sticky top-0 px-3 py-6 bg-gray-50`}>
-                  <WordBarChart frlb={frlb} book={book} />
-                </div>
-
-                {/* verses on bar click */}
+              <div className="relative">
                 <div
-                  className={`mx-2 mt-4 grid grid-cols-3 md:grid-cols-5 lg:grid-cols-8 gap-y-2 gap-x-2`}
+                  className={`min-h-screen
+              ${dark ? "bg-gray-800" : "bg-gray-50 "}
+              `}
                 >
-                  {versesF.map((verse, key) => (
-                    <div
-                      key={key}
-                      className={`p-2 border cursor-pointer text-gray-600 text-xs shadow-sm hover:bg-blue-100 ring-1 ring-blue-100`}
-                      onClick={(e) => handleClickVerse(e, verse)}
-                    >
-                      {verse.versRefAbbrev}
-                    </div>
-                  ))}
+                  {/* bar chart */}
+                  <div
+                    className={`relative
+                  px-3 py-6
+                ${dark ? "bg-gray-800" : "bg-gray-50 "}
+                `}
+                  >
+                    <WordBarChart
+                      frlb={frlb}
+                      book={book}
+                      setVerseClicked={setVerseClicked}
+                    />
+                  </div>
+
+                  {/* verses on bar click */}
+                  <div className="max-h-[50vh] overflow-y-scroll">
+                    {verseClicked ? (
+                      <div className={`mx-2 mt-4`}>
+                        <div
+                          className={`flex justify-between pb-2 bg-white
+                        p-2 font-semibold
+                        border-r-2 border-l-2 border-t-2
+                        ${
+                          dark
+                            ? "text-gray-300 bg-gray-700 bg-opacity-10 border-gray-600"
+                            : "text-gray-500 border-gray-300"
+                        }
+                        `}
+                        >
+                          <div className="font-semibold pl-1 text-sm flex items-center">
+                            {verseClickedRef.versRefAbbrev}
+                          </div>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            strokeWidth={2.0}
+                            stroke="currentColor"
+                            className="w-6 h-6 cursor-pointer"
+                            onClick={() => setVerseClicked(false)}
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M6 18 18 6M6 6l12 12"
+                            />
+                          </svg>
+                        </div>
+                        <div
+                          className={`flex flex-wrap p-1 ring-2 ring-inset
+                                ${
+                                  dark
+                                    ? "bg-gray-700 bg-opacity-80 text-gray-200 ring-gray-600"
+                                    : "bg-white text-gray-700 ring-gray-300"
+                                }
+                                `}
+                        >
+                          {verseClickedRef.verseWord.map((edge, i) => (
+                            <div
+                              key={i}
+                              className={`flex flex-col mr-1 mb-1 p-1`}
+                            >
+                              <div
+                                className={`p-1 text-sm lg:text-lg ${
+                                  lexnIdLastVisited ===
+                                    edge.node.wordLexnIdCopy &&
+                                  "ring-2 ring-inset ring-gray-400"
+                                }`}
+                              >
+                                {edge.node.wordGreek}
+                              </div>
+                              <div className={`p-1 text-xs`}>
+                                {edge.node.wordEnglish}
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      <div
+                        className={`mx-2 mt-4 grid grid-cols-3 md:grid-cols-5 lg:grid-cols-8 gap-y-2 gap-x-2`}
+                      >
+                        {versesF.map((verse, key) => (
+                          <div
+                            key={key}
+                            className={`p-2 cursor-pointer text-xs shadow-sm
+                       ${
+                         dark
+                           ? "text-gray-400 border border-gray-600"
+                           : "hover:bg-blue-100 text-gray-600 border"
+                       }`}
+                            onClick={(e) => handleClickVerse(e, verse)}
+                          >
+                            {verse.versRefAbbrev}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             )}
 
             {/* parsing section */}
             {sectionShowing === "parsing" && (
-              <div className={`min-h-screen text-gray-600 bg-gray-50`}>
-                <div className="flex justify-center py-10 space-x-1 sticky top-0 bg-gray-50">
-                  <Carousel
-                    parsVar={"parsTense"}
-                    visibleItem={parsTense}
-                    parsLabel={"T"}
-                    pdgm={pdgm}
-                    pdgmF={pdgmF}
-                  />
-                  <Carousel
-                    parsVar={"parsVoice"}
-                    visibleItem={parsVoice}
-                    parsLabel={"V"}
-                    pdgm={pdgm}
-                    pdgmF={pdgmF}
-                  />
-                  <Carousel
-                    parsVar={"parsMood"}
-                    visibleItem={parsMood}
-                    parsLabel={"M"}
-                    pdgm={pdgm}
-                    pdgmF={pdgmF}
-                  />
-                  <Carousel
-                    parsVar={"parsPerson"}
-                    visibleItem={parsPerson}
-                    parsLabel={"P"}
-                    pdgm={pdgm}
-                    pdgmF={pdgmF}
-                  />
-                  <Carousel
-                    parsVar={"parsCase"}
-                    visibleItem={parsCase}
-                    parsLabel={"C"}
-                    pdgm={pdgm}
-                    pdgmF={pdgmF}
-                  />
-                  <Carousel
-                    parsVar={"parsGender"}
-                    visibleItem={parsGender}
-                    parsLabel={"G"}
-                    pdgm={pdgm}
-                    pdgmF={pdgmF}
-                  />
-                  <Carousel
-                    parsVar={"parsNumber"}
-                    visibleItem={parsNumber}
-                    parsLabel={"N"}
-                    pdgm={pdgm}
-                    pdgmF={pdgmF}
-                  />
-                </div>
+              <div className="">
+                <div
+                  className={`min-h-screen text-gray-600
+              ${dark ? "bg-gray-800" : "bg-gray-50 "}
+              `}
+                >
+                  <div
+                    className={`flex justify-center py-10 space-x-1
+                ${dark ? "bg-gray-800" : "bg-gray-50 "}
+                `}
+                  >
+                    <Carousel
+                      parsVar={"parsTense"}
+                      visibleItem={parsTense}
+                      parsLabel={"T"}
+                      pdgm={pdgm}
+                      pdgmF={pdgmF}
+                    />
+                    <Carousel
+                      parsVar={"parsVoice"}
+                      visibleItem={parsVoice}
+                      parsLabel={"V"}
+                      pdgm={pdgm}
+                      pdgmF={pdgmF}
+                    />
+                    <Carousel
+                      parsVar={"parsMood"}
+                      visibleItem={parsMood}
+                      parsLabel={"M"}
+                      pdgm={pdgm}
+                      pdgmF={pdgmF}
+                    />
+                    <Carousel
+                      parsVar={"parsPerson"}
+                      visibleItem={parsPerson}
+                      parsLabel={"P"}
+                      pdgm={pdgm}
+                      pdgmF={pdgmF}
+                    />
+                    <Carousel
+                      parsVar={"parsCase"}
+                      visibleItem={parsCase}
+                      parsLabel={"C"}
+                      pdgm={pdgm}
+                      pdgmF={pdgmF}
+                    />
+                    <Carousel
+                      parsVar={"parsGender"}
+                      visibleItem={parsGender}
+                      parsLabel={"G"}
+                      pdgm={pdgm}
+                      pdgmF={pdgmF}
+                    />
+                    <Carousel
+                      parsVar={"parsNumber"}
+                      visibleItem={parsNumber}
+                      parsLabel={"N"}
+                      pdgm={pdgm}
+                      pdgmF={pdgmF}
+                    />
+                  </div>
 
-                <div className={`flex justify-center`}>
-                  <div className={`flex flex-col max-w-[768px] justify-center`}>
-                    <div className={`flex justify-between px-4 py-4`}>
-                      <div className={`flex flex-col pr-8`}>
-                        {pdgmF.map((item, i) => (
-                          <div key={i} className={`p-1`}>
-                            {item.node.pdgmPars.parsId}
-                          </div>
-                        ))}
-                      </div>
-                      <div className={`flex flex-col pr-8`}>
-                        {pdgmF.map((item, i) => (
-                          <div key={i} className={`p-1`}>
-                            {item.node.pdgmGreek}
-                          </div>
-                        ))}
-                      </div>
-                      <div className={`flex flex-col`}>
-                        {pdgmF.map((item, i) => (
-                          <div key={i} className={`p-1`}>
-                            {item.node.pdgmFreqNt}
-                          </div>
-                        ))}
+                  <div className={`flex justify-center`}>
+                    <div
+                      className={`flex flex-col max-w-[768px] justify-center`}
+                    >
+                      <div className={`flex justify-between px-4 py-4`}>
+                        <div className={`flex flex-col pr-8`}>
+                          {pdgmF.map((item, i) => (
+                            <div key={i} className={`p-1`}>
+                              {item.node.pdgmPars.parsId}
+                            </div>
+                          ))}
+                        </div>
+                        <div className={`flex flex-col pr-8`}>
+                          {pdgmF.map((item, i) => (
+                            <div key={i} className={`p-1`}>
+                              {item.node.pdgmGreek}
+                            </div>
+                          ))}
+                        </div>
+                        <div className={`flex flex-col`}>
+                          {pdgmF.map((item, i) => (
+                            <div key={i} className={`p-1`}>
+                              {item.node.pdgmFreqNt}
+                            </div>
+                          ))}
+                        </div>
                       </div>
                     </div>
                   </div>

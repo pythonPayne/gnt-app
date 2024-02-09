@@ -83,7 +83,7 @@ const Chapter = (props) => {
     dispatch(setTemplate("chapter"))
     dispatch(toggleShowMenu(false))
     dispatch(toggleShowSettings(true))
-    dispatch(toggleExpandAllVerses(true))
+    // dispatch(toggleExpandAllVerses(true))
   }, [])
 
   const chap = data.gnt.allChaps.edges[0].node

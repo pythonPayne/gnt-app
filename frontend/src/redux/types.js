@@ -10,6 +10,7 @@ export const SHOW_PARS_ID = "SHOW_PARS_ID"
 export const SHOW_LEXN_ID = "SHOW_LEXN_ID"
 export const SHOW_GREEK_COLOR = "SHOW_GREEK_COLOR"
 export const EXPAND_ALL_VERSES = "EXPAND_ALL_VERSES"
+export const LAST_VERSE_EXPANDED = "LAST_VERSE_EXPANDED"
 // word
 export const SET_BOOK = "SET_BOOK"
 export const SET_SECTION_SHOWING = "SET_SECTION_SHOWING"

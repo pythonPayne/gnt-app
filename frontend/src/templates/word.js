@@ -4,7 +4,10 @@ import { useSelector, useDispatch } from "react-redux"
 import Layout from "../components/Layout"
 import WordBarChart from "../components/WordBarChart"
 import { toggleShowMenu, setTemplate } from "../redux/actions/layout"
-import { toggleExpandAllVerses } from "../redux/actions/verseCard"
+import {
+  toggleExpandAllVerses,
+  setLastVerseExpanded,
+} from "../redux/actions/verseCard"
 import {
   setSectionShowing,
   setLexnIdLastVisited,
@@ -57,16 +60,6 @@ export const query = graphql`
                             versRefAbbrev
                             versChapUrl
                             versId
-                            word {
-                              edges {
-                                node {
-                                  wordId
-                                  wordGreek
-                                  wordEnglish
-                                  wordLexnIdCopy
-                                }
-                              }
-                            }
                           }
                         }
                       }
@@ -108,7 +101,6 @@ const Word = (props) => {
   const [verses, setVerses] = useState(null)
 
   const [verseClicked, setVerseClicked] = useState(false)
-  const [verseClickedRef, setVerseClickedRef] = useState(null)
 
   useEffect(() => {
     if (props.data.gnt.allLexns.edges[0].node.lexnId !== lexnIdLastVisited) {
@@ -144,7 +136,6 @@ const Word = (props) => {
             versRefAbbrev: edge.node.wordVers.versRefAbbrev,
             versId: edge.node.wordVers.versId,
             versChapUrl: edge.node.wordVers.versChapUrl,
-            verseWord: edge.node.wordVers.word.edges,
           }
         })
         .sort((a, b) => (a.versId > b.versId ? 1 : -1))
@@ -195,9 +186,9 @@ const Word = (props) => {
 
   const handleClickVerse = (e, verse) => {
     // dispatch(setScrollPosition(e.pageY - e.screenY * 0.4))
-    // navigate(`/${verse.versChapUrl}`)
-    setVerseClicked(true)
-    setVerseClickedRef(versesF.filter((v) => v.versId === verse.versId)[0])
+    dispatch(toggleExpandAllVerses(false))
+    dispatch(setLastVerseExpanded(verse.versId))
+    navigate(`/${verse.versChapUrl}`)
   }
 
   /*************************************************************************/
@@ -490,88 +481,24 @@ const Word = (props) => {
 
                   {/* verses on bar click */}
                   <div className="max-h-[50vh] overflow-y-scroll">
-                    {verseClicked ? (
-                      <div className={`mx-2 mt-4`}>
+                    <div
+                      className={`mx-2 mt-4 grid grid-cols-3 md:grid-cols-5 lg:grid-cols-8 gap-y-2 gap-x-2`}
+                    >
+                      {versesF.map((verse, key) => (
                         <div
-                          className={`flex justify-between pb-2 bg-white
-                        p-2 font-semibold
-                        border-r-2 border-l-2 border-t-2
-                        ${
-                          dark
-                            ? "text-gray-300 bg-gray-700 bg-opacity-10 border-gray-600"
-                            : "text-gray-500 border-gray-300"
-                        }
-                        `}
-                        >
-                          <div className="font-semibold pl-1 text-sm flex items-center">
-                            {verseClickedRef.versRefAbbrev}
-                          </div>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            strokeWidth={2.0}
-                            stroke="currentColor"
-                            className="w-6 h-6 cursor-pointer"
-                            onClick={() => setVerseClicked(false)}
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              d="M6 18 18 6M6 6l12 12"
-                            />
-                          </svg>
-                        </div>
-                        <div
-                          className={`flex flex-wrap p-1 ring-2 ring-inset
-                                ${
-                                  dark
-                                    ? "bg-gray-700 bg-opacity-80 text-gray-200 ring-gray-600"
-                                    : "bg-white text-gray-700 ring-gray-300"
-                                }
-                                `}
-                        >
-                          {verseClickedRef.verseWord.map((edge, i) => (
-                            <div
-                              key={i}
-                              className={`flex flex-col mr-1 mb-1 p-1`}
-                            >
-                              <div
-                                className={`p-1 text-sm lg:text-lg ${
-                                  lexnIdLastVisited ===
-                                    edge.node.wordLexnIdCopy &&
-                                  "ring-2 ring-inset ring-gray-400"
-                                }`}
-                              >
-                                {edge.node.wordGreek}
-                              </div>
-                              <div className={`p-1 text-xs`}>
-                                {edge.node.wordEnglish}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ) : (
-                      <div
-                        className={`mx-2 mt-4 grid grid-cols-3 md:grid-cols-5 lg:grid-cols-8 gap-y-2 gap-x-2`}
-                      >
-                        {versesF.map((verse, key) => (
-                          <div
-                            key={key}
-                            className={`p-2 cursor-pointer text-xs shadow-sm
+                          key={key}
+                          className={`p-2 cursor-pointer text-xs shadow-sm
                        ${
                          dark
                            ? "text-gray-400 border border-gray-600"
                            : "hover:bg-blue-100 text-gray-600 border"
                        }`}
-                            onClick={(e) => handleClickVerse(e, verse)}
-                          >
-                            {verse.versRefAbbrev}
-                          </div>
-                        ))}
-                      </div>
-                    )}
+                          onClick={(e) => handleClickVerse(e, verse)}
+                        >
+                          {verse.versRefAbbrev}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </div>

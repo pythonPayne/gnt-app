@@ -65,7 +65,13 @@ exports.createPages = ({ actions }) => {
   lexnIds.forEach((lexnId) => {
     actions.createPage({
       path: "word-" + lexnId,
-      component: path.resolve(`./src/templates/word.js`),
+      component: path.resolve(
+        `./src/templates/${
+          lexnId > "0040" || ["0019", "0022", "0034", "0036"].includes(lexnId)
+            ? "word_expanded"
+            : "word"
+        }.js`
+      ),
       context: {
         lexnId: lexnId,
       },

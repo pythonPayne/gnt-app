@@ -5,6 +5,7 @@ import {
   SHOW_LEXN_ID,
   SHOW_GREEK_COLOR,
   EXPAND_ALL_VERSES,
+  LAST_VERSE_EXPANDED,
 } from "../types"
 
 const initialState = {
@@ -13,7 +14,8 @@ const initialState = {
   showParsId: true,
   showLexnId: true,
   showGreekColor: false,
-  expandAllVerses: true,
+  expandAllVerses: false,
+  lastVerseExpanded: null,
 }
 
 const verseCardReducer = (state = initialState, action) => {
@@ -30,6 +32,8 @@ const verseCardReducer = (state = initialState, action) => {
       return { ...state, showGreekColor: action.payload }
     case EXPAND_ALL_VERSES:
       return { ...state, expandAllVerses: action.payload }
+    case LAST_VERSE_EXPANDED:
+      return { ...state, lastVerseExpanded: action.payload }
 
     default:
       return state

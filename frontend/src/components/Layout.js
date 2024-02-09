@@ -111,31 +111,6 @@ const Layout = (props) => {
                 )}
               </div>
 
-              {template !== "word" && (
-                <>
-                  <div
-                    className={`pl-4 text-lg text-blue-300 border-b uppercase py-3`}
-                  >
-                    Word Settings
-                  </div>
-                  <div
-                    className={`flex flex-col space-y-4 text-white pt-3 pb-9`}
-                  >
-                    {lexnGreekLastVisited ? (
-                      <div
-                        className={`pl-6 cursor-pointer`}
-                        onClick={() => dispatch(clearWordState())}
-                      >
-                        Clear {lexnGreekLastVisited}
-                      </div>
-                    ) : (
-                      <div className={`pl-6 text-gray-500`}>
-                        Click a word first
-                      </div>
-                    )}
-                  </div>
-                </>
-              )}
               <div
                 className={`pl-4 text-lg text-blue-300 border-b uppercase py-3`}
               >

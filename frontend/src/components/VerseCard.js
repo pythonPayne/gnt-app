@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react"
 import { useSelector } from "react-redux"
 import { Link } from "gatsby"
 import { useDispatch } from "react-redux"
+import { setLastVerseExpanded } from "../redux/actions/verseCard"
 
 const VerseCard = (props) => {
   const { verse } = props
@@ -14,11 +15,19 @@ const VerseCard = (props) => {
   const showParsId = useSelector((state) => state.verseCard.showParsId)
   const showLexnId = useSelector((state) => state.verseCard.showLexnId)
   const showGreekColor = useSelector((state) => state.verseCard.showGreekColor)
+  const lastVerseExpanded = useSelector(
+    (state) => state.verseCard.lastVerseExpanded
+  )
+
   const lexnIdLastVisited = useSelector((state) => state.word.lexnIdLastVisited)
   const parsIds = useSelector((state) => state.word.parsIds)
 
   useEffect(() => {
-    setCardExpanded(props.open)
+    if (verse.versId === lastVerseExpanded) {
+      setCardExpanded(true)
+    } else {
+      setCardExpanded(props.open)
+    }
   }, [props])
 
   return (
@@ -33,7 +42,10 @@ const VerseCard = (props) => {
             : "text-gray-500 border-gray-300"
         }
       `}
-        onClick={() => setCardExpanded(!cardExpanded)}
+        onClick={() => {
+          dispatch(setLastVerseExpanded(verse.versId))
+          setCardExpanded(!cardExpanded)
+        }}
       >
         {verse.versRefAbbrev}
       </div>
@@ -52,12 +64,7 @@ const VerseCard = (props) => {
             <Link
               to={`/word-${w.node.wordLexn.lexnId}`}
               key={i}
-              className={`flex flex-col mr-1 mb-1 p-1
-            ${
-              w.node.wordLexn.lexnId === lexnIdLastVisited &&
-              parsIds.includes(w.node.wordPars.parsId) &&
-              "ring-2 ring-inset ring-gray-400"
-            }`}
+              className={`flex flex-col mr-1 mb-1 p-1`}
             >
               {showGreek && (
                 <div

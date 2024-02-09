@@ -96,7 +96,7 @@ const Chapter = (props) => {
       ${dark ? "bg-gray-800" : "bg-gray-50"}
       `}
       >
-        <div className={`max-w-[1100px]`}>
+        <div className={`w-screen max-w-[1100px]`}>
           <div
             className={`flex items-center justify-center h-[12vh] text-3xl tracking-wide mb-2 font-serif
             ${dark ? "text-gray-300" : "text-gray-500"}

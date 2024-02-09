@@ -31,7 +31,7 @@ const VerseCard = (props) => {
   }, [props])
 
   return (
-    <div className={`mb-8 shadow-md`}>
+    <div className={`mb-8 shadow-md max-w-[1100px]`}>
       <div
         className={`p-2 font-semibold cursor-pointer
         border-l-2 border-r-2 border-t-2
@@ -137,7 +137,9 @@ const VerseCard = (props) => {
 
               {showLexnId && (
                 <div className={`flex justify-between p-1 text-xs`}>
-                  <div className={``}>{w.node.wordLexn.lexnGreek}</div>
+                  <div className={`text-gray-400`}>
+                    {w.node.wordLexn.lexnGreek}
+                  </div>
                   <div className={`text-gray-400 pl-3`}>
                     {w.node.wordLexn.lexnFreqNt < 1000 &&
                       w.node.wordLexn.lexnFreqNt}

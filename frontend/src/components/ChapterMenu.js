@@ -30,8 +30,8 @@ const ChapterMenu = () => {
     return (
       <div>
         <div
-          className={`cursor-pointer px-1 py-2 text-gray-100 hover:text-blue-300 hover:scale-105
-            ${sameBook ? "border-b border-gray-200" : "border-none"}`}
+          className={`cursor-pointer px-1 py-2 text-gray-300 font-mono text-sm hover:text-blue-500
+            ${sameBook ? "border-b border-gray-400" : "border-none"}`}
           onClick={() => {
             if (sameBook) {
               setBookOpen("")
@@ -49,7 +49,7 @@ const ChapterMenu = () => {
               <Link
                 key={ch}
                 to={`/${book.node.bookNameAbbrev}-${ch}`}
-                className={`text-center px-1 py-1 text-white hover:ring-2 hover:ring-gray-100 `}
+                className={`text-center px-1 py-1 text-gray-500 hover:text-white`}
               >
                 {ch}
               </Link>

@@ -3,6 +3,7 @@ import { graphql, navigate } from "gatsby"
 import { useSelector, useDispatch } from "react-redux"
 import Layout from "../components/Layout"
 import VocabCard from "../components/VocabCard"
+import { toggleShowMenu, toggleShowSettings } from "../redux/actions/layout"
 
 export const query = graphql`
   query {
@@ -32,6 +33,11 @@ const Search = (props) => {
   const lexns = props.data.gnt.allLexns.edges
   const [search, setSearch] = useState("")
 
+  useEffect(() => {
+    dispatch(toggleShowMenu(false))
+    dispatch(toggleShowSettings(true))
+  }, [])
+
   const handleLexnIdClick = (lexnId) => {
     navigate(`/word-${lexnId}`)
   }
@@ -48,16 +54,20 @@ const Search = (props) => {
             value={search}
             placeholder="search..."
             onChange={(e) => setSearch(e.target.value)}
-            className="focus:ring-2 ring-1 mb-12 px-2 py-1"
+            className="focus:ring-2 ring-1 mb-12 px-2 py-1 text-xl"
           />
         </div>
 
         <div>
           {lexns
-            .filter((edge) =>
-              edge.node.lexnDefinition
-                .toLocaleLowerCase()
-                .includes(search.toLocaleLowerCase())
+            .filter(
+              (edge) =>
+                edge.node.lexnDefinition
+                  .toLocaleLowerCase()
+                  .includes(search.toLocaleLowerCase()) ||
+                edge.node.lexnGloss
+                  .toLocaleLowerCase()
+                  .includes(search.toLocaleLowerCase())
             )
             .slice(0, 100)
             .map((edge) => (

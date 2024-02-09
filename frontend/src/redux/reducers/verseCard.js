@@ -11,7 +11,7 @@ import {
 const initialState = {
   showGreek: true,
   showEnglish: true,
-  showParsId: true,
+  showParsId: false,
   showLexnId: true,
   showGreekColor: false,
   expandAllVerses: false,

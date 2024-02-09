@@ -15,6 +15,7 @@ import {
 } from "../redux/actions/verseCard"
 import { clearWordState } from "../redux/actions/word"
 import ChapterMenu from "./ChapterMenu"
+import { navigate } from "gatsby"
 
 const Layout = (props) => {
   const dispatch = useDispatch()
@@ -40,7 +41,7 @@ const Layout = (props) => {
   const settingsItem = (showVar, toggleShowVar, displayText) => {
     return (
       <div
-        className={`pl-6 text-md cursor-pointer ${
+        className={`pl-6 text-sm md:text-md cursor-pointer ${
           showVar ? "text-red-300" : "text-gray-600"
         }`}
         onClick={() => dispatch(toggleShowVar(!showVar))}
@@ -82,47 +83,62 @@ const Layout = (props) => {
       {/* side menu */}
       <div
         className={`fixed top-0 right-0 min-h-screen z-10 overflow-auto max-w-[300px] no-scrollbar        
-        ${dark ? "bg-gray-900" : "bg-gray-800"}
+        ${dark ? "bg-gray-900" : "bg-gray-900"}
         ${showMenu ? "w-[50vw]" : "w-0"}
         `}
       >
         {showSettings ? (
           <div className={`relative`}>
-            <div className={`absolute pb-[50vh] w-full`}>
+            <div className={`absolute pb-[50vh] w-full pt-2`}>
               <div
-                className={`pl-4 text-lg text-blue-300 border-b py-3 uppercase`}
+                className={`pl-4 text-md md:text-lg text-blue-500 border-b-2 border-gray-600 py-1 font-mono`}
               >
-                Verse Settings
+                Verses
               </div>
-              <div className={`flex flex-col space-y-4 text-white pt-3 pb-9`}>
-                {settingsItem(showGreek, toggleShowGreek, "Show Greek")}
-                {settingsItem(showEnglish, toggleShowEnglish, "Show English")}
-                {settingsItem(showParsId, toggleShowParsId, "Show Parsing")}
-                {settingsItem(showLexnId, toggleShowLexnId, "Show Lexicon")}
+              <div
+                className={`flex flex-col space-y-4 text-white pt-3 pb-9 font-serif tracking-wide`}
+              >
+                {settingsItem(showGreek, toggleShowGreek, "Greek")}
+                {settingsItem(showEnglish, toggleShowEnglish, "English")}
+                {settingsItem(showParsId, toggleShowParsId, "Parsing")}
+                {settingsItem(showLexnId, toggleShowLexnId, "Lexicon")}
                 {settingsItem(
                   showGreekColor,
                   toggleShowGreekColor,
-                  "Show Colors"
+                  "Highlighting"
                 )}
                 {settingsItem(
                   expandAllVerses,
                   toggleExpandAllVerses,
-                  "Expand All Verses"
+                  "Expand Verses"
                 )}
               </div>
 
               <div
-                className={`pl-4 text-lg text-blue-300 border-b uppercase py-3`}
+                className={`pl-4 text-md md:text-lg text-blue-500 border-b-2 border-gray-600 py-1 font-mono`}
               >
-                Display Settings
+                Display
               </div>
               <div
-                className={`pl-6 pt-3 text-md cursor-pointer focus:outline-none
+                className={`pl-6 pt-3 pb-9 text-sm md:text-md cursor-pointer focus:outline-none
                 ${dark ? "text-red-300" : "text-gray-600"}
                 `}
                 onClick={() => dispatch(setDark(!dark))}
               >
                 Dark mode
+              </div>
+
+              <div
+                className={`pl-4 text-md md:text-lg text-blue-500 border-b-2 border-gray-600 py-1 font-mono`}
+              >
+                Beta
+              </div>
+              <div
+                className={`pl-6 pt-3 text-sm md:text-md cursor-pointer focus:outline-none text-gray-300 hover:text-white
+                `}
+                onClick={() => navigate("/search")}
+              >
+                Search
               </div>
             </div>
           </div>
@@ -174,7 +190,7 @@ const Layout = (props) => {
             </div>
             <div
               className={`fixed bottom-0 h-24 w-full z-10
-              ${dark ? "bg-gray-900" : "bg-gray-800"}
+              ${dark ? "bg-gray-900" : "bg-gray-900"}
               `}
             ></div>
           </>

@@ -497,7 +497,7 @@ const Word = (props) => {
                   </div>
 
                   {/* verses on bar click */}
-                  <div className="max-h-[50vh] overflow-y-scroll">
+                  <div className="max-h-[50vh] overflow-y-scroll no-scrollbar">
                     {verseClicked ? (
                       <div className={`mx-2 mt-4`}>
                         <div

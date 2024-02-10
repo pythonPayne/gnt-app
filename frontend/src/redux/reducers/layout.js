@@ -4,7 +4,7 @@ const initialState = {
   showMenu: false,
   showSettings: false,
   template: "chapter",
-  dark: false,
+  dark: true,
 }
 
 const layoutReducer = (state = initialState, action) => {

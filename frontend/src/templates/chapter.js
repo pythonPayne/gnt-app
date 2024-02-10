@@ -3,13 +3,13 @@ import { graphql } from "gatsby"
 import { useSelector, useDispatch } from "react-redux"
 import VerseCard from "../components/VerseCard"
 import Layout from "../components/Layout"
+import { SEO } from "../components/seo"
 
 import {
   toggleShowMenu,
   toggleShowSettings,
   setTemplate,
 } from "../redux/actions/layout"
-import { toggleExpandAllVerses } from "../redux/actions/verseCard"
 
 export const query = graphql`
   query ($chapId: String!) {
@@ -83,7 +83,6 @@ const Chapter = (props) => {
     dispatch(setTemplate("chapter"))
     dispatch(toggleShowMenu(false))
     dispatch(toggleShowSettings(true))
-    // dispatch(toggleExpandAllVerses(true))
   }, [])
 
   const chap = data.gnt.allChaps.edges[0].node
@@ -98,7 +97,7 @@ const Chapter = (props) => {
       >
         <div className={`w-screen max-w-[1100px]`}>
           <div
-            className={`flex items-center justify-center h-[12vh] text-3xl tracking-wide mb-2 font-serif
+            className={`flex items-center justify-center h-[12vh] text-3xl tracking-wide mb-2 font-mono
             ${dark ? "text-gray-300" : "text-gray-500"}
             `}
           >
@@ -130,3 +129,5 @@ const Chapter = (props) => {
 }
 
 export default Chapter
+
+export const Head = () => <SEO title="GNT" />

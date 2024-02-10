@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react"
 import Layout from "../components/Layout"
 import Vivus from "vivus"
+import { SEO } from "../components/seo"
 
 const Index = () => {
   const [svgFill, setSvgFill] = useState("none")
@@ -22,7 +23,7 @@ const Index = () => {
 
   return (
     <Layout>
-      <div className="bg-gray-700 flex justify-center items-center min-h-screen">
+      <div className="bg-gray-800 flex justify-center items-center min-h-screen">
         <svg
           id="my-svg-id"
           viewBox="0 0 244 86"
@@ -30,11 +31,11 @@ const Index = () => {
           className={`
           h-[86px] w-[244px] 
           xl:h-[172px] xl:w-[488px]
-          transition-all ease-in duration-[1500ms] stroke-[3]
+          transition-all ease-in duration-[2000ms] stroke-[3]
           ${
             svgFill === "none"
-              ? "fill-gray-700 stroke-gray-200"
-              : "fill-gray-200 stroke-gray-200"
+              ? "fill-gray-900 stroke-gray-300"
+              : "fill-gray-300 stroke-gray-300 animate-pulse"
           }`}
           style={{ strokeLinecap: "square", visibility: "hidden" }}
         >
@@ -48,3 +49,5 @@ const Index = () => {
 }
 
 export default Index
+
+export const Head = () => <SEO title="GNT" />

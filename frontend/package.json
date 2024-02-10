@@ -1,11 +1,15 @@
 {
-  "name": "gnt-frontend",
+  "name": "gnt",
   "version": "1.0.0",
   "private": true,
-  "description": "gnt-frontend",
+  "description": "An easy to use interlinear Greek New Testament, with details on each Greek word used.",
   "author": "Stephen Payne",
   "keywords": [
-    "gatsby"
+    "Greek",
+    "New Testament",
+    "interlinear",
+    "Bible",
+    "lexicon"
   ],
   "scripts": {
     "develop": "gatsby develop -H 0.0.0.0",

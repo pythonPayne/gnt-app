@@ -17,6 +17,7 @@ import {
   setLexnGreekLastVisited,
 } from "../redux/actions/word"
 import Carousel from "../components/Carousel"
+import { SEO } from "../components/seo"
 
 export const query = graphql`
   query ($lexnId: String!) {
@@ -367,10 +368,12 @@ const Word = (props) => {
                 <div
                   className={`min-h-screen flex justify-center items-start mx-4 mt-6 pb-24`}
                 >
-                  <div className={`grid grid-cols-2 gap-y-4 gap-x-8 text-lg`}>
+                  <div
+                    className={`grid grid-cols-2 gap-y-4 gap-x-4 text-sm md:text-lg`}
+                  >
                     <div className={`flex justify-end items-start`}>
                       <div
-                        className={`text-right font-bold border-b-[1px] border-gray-500`}
+                        className={`text-right font-mono border-b-[1px] border-gray-500`}
                       >
                         Greek:
                       </div>
@@ -382,7 +385,7 @@ const Word = (props) => {
                     </div>
                     <div className={`flex justify-end items-start`}>
                       <div
-                        className={`text-right font-bold border-b-[1px] border-gray-500`}
+                        className={`text-right font-mono border-b-[1px] border-gray-500`}
                       >
                         Transliteration:
                       </div>
@@ -394,7 +397,7 @@ const Word = (props) => {
                     </div>
                     <div className={`flex justify-end items-start`}>
                       <div
-                        className={`text-right font-bold border-b-[1px] border-gray-500`}
+                        className={`text-right font-mono border-b-[1px] border-gray-500`}
                       >
                         Function:
                       </div>
@@ -406,7 +409,7 @@ const Word = (props) => {
                     </div>
                     <div className={`flex justify-end items-start`}>
                       <div
-                        className={`text-right font-bold border-b-[1px] border-gray-500`}
+                        className={`text-right font-mono border-b-[1px] border-gray-500`}
                       >
                         Gloss:
                       </div>
@@ -418,7 +421,7 @@ const Word = (props) => {
                     </div>
                     <div className={`flex justify-end items-start`}>
                       <div
-                        className={`text-right font-bold border-b-[1px] border-gray-500`}
+                        className={`text-right font-mono border-b-[1px] border-gray-500`}
                       >
                         Translation:
                       </div>
@@ -430,7 +433,7 @@ const Word = (props) => {
                     </div>
                     <div className={`flex justify-end items-start`}>
                       <div
-                        className={`text-right font-bold border-b-[1px] border-gray-500`}
+                        className={`text-right font-mono border-b-[1px] border-gray-500`}
                       >
                         # in NT:
                       </div>
@@ -442,7 +445,7 @@ const Word = (props) => {
                     </div>
                     <div className={`flex justify-end items-start`}>
                       <div
-                        className={`text-right font-bold border-b-[1px] border-gray-500`}
+                        className={`text-right font-mono border-b-[1px] border-gray-500`}
                       >
                         ID:
                       </div>
@@ -613,3 +616,5 @@ const Word = (props) => {
 }
 
 export default Word
+
+export const Head = () => <SEO title="GNT" />

@@ -29,11 +29,11 @@ const VocabCard = ({ card }) => {
   return (
     <div>
       <div
-        className="h-32 w-64 md:h-48 md:w-72 text-[0.60rem] leading-[0.75rem] md:text-sm "
+        className="h-32 w-64 md:h-[20rem] md:w-[30rem] text-xs md:text-lg"
         style={cardStyle}
       >
         <div
-          className="ring-2 ring-blue-500 ring-opacity-50 w-full h-full absolute cursor-pointer"
+          className="ring-2 ring-gray-900 ring-opacity-50 w-full h-full absolute cursor-pointer"
           onClick={() => setShowingBack(!showingBack)}
           style={contentStyle}
         >

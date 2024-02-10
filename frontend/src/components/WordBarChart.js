@@ -21,7 +21,7 @@ const WordBarChart = ({ frlb, book, setVerseClicked }) => {
       >
         <div className={`w-20 h-full flex flex-col-reverse mr-3`}>
           <div
-            className={`h-[15%] flex justify-center font-bold tracking-wide cursor-pointer`}
+            className={`h-[15%] font-mono flex justify-center font-bold tracking-wide cursor-pointer`}
             onClick={() => {
               dispatch(setBook(barBook === book ? "" : barBook))
               setVerseClicked(false)

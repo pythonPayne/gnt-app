@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from "react-redux"
 import Layout from "../components/Layout"
 import VocabCard from "../components/VocabCard"
 import { toggleShowMenu, toggleShowSettings } from "../redux/actions/layout"
+import { SEO } from "../components/seo"
 
 export const query = graphql`
   query {
@@ -82,3 +83,5 @@ const Search = (props) => {
 }
 
 export default Search
+
+export const Head = () => <SEO title="GNT" />

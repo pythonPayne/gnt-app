@@ -55,14 +55,23 @@ const Layout = (props) => {
     <div className={`no-scrollbar`}>
       {/* menu button  */}
       <div
-        className={`bg-blue-500 text-white rounded-full fixed bottom-7 right-7 z-20`}
+        className={`rounded-full fixed bottom-7 right-7 z-20 border-[3px] bg-opacity-50 
+      ${
+        showMenu
+          ? "bg-gray-900 border-gray-900"
+          : dark
+          ? "bg-gray-800 border-gray-900"
+          : "bg-gray-50 border-gray-300"
+      } `}
       >
         <div
           className={`flex flex-col space-y-3 h-16 w-16 justify-center items-center cursor-pointer`}
           onClick={() => dispatch(toggleShowMenu(!showMenu))}
         >
           <div
-            className={`transition-all duration-200 bg-white
+            className={`transition-all duration-200 ${
+              dark ? "bg-gray-500" : "bg-gray-400"
+            }
                     ${
                       showMenu
                         ? "w-1 h-16 rotate-45 translate-y-[1.18rem] rounded-lg"
@@ -70,7 +79,9 @@ const Layout = (props) => {
                     }`}
           ></div>
           <div
-            className={`transition-all duration-200 bg-white
+            className={`transition-all duration-200 ${
+              dark ? "bg-gray-500" : "bg-gray-400"
+            }
                     ${
                       showMenu
                         ? "w-1 h-16 -rotate-45 -translate-y-[1.18rem] rounded-lg"
@@ -157,7 +168,7 @@ const Layout = (props) => {
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
-                  className={`h-16 w-16 stroke-white animate-spin-slow cursor-pointer flex justify-center items-center fill-gray-900`}
+                  className={`h-16 w-12 stroke-gray-500 hover:stroke-gray-200 animate-spin-slow cursor-pointer flex justify-center items-center fill-gray-900 pb-[5px]`}
                   onClick={() => dispatch(toggleShowSettings(!showSettings))}
                 >
                   <path
@@ -177,7 +188,7 @@ const Layout = (props) => {
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
-                  className={`h-16 w-16 stroke-white fill-white stroke-0 pl-2 pt-2 cursor-pointer text-center`}
+                  className={`h-16 w-12 stroke-gray-500 fill-gray-500 hover:fill-gray-200 stroke-0 pl-2 pt-2 cursor-pointer text-center pb-[5px]`}
                   onClick={() => dispatch(toggleShowSettings(!showSettings))}
                 >
                   <path

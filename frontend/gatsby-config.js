@@ -1,4 +1,10 @@
 module.exports = {
+  siteMetadata: {
+    title: `GNT`,
+    description: `An easy to use interlinear Greek New Testament, with details on each Greek word used.`,
+    keywords: `Greek, New Testament, interlinear, Bible, lexicon`,
+    siteUrl: `https://greeknt.netlify.app/`,
+  },
   plugins: [
     "gatsby-plugin-postcss",
     {

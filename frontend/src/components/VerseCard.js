@@ -34,11 +34,11 @@ const VerseCard = (props) => {
     <div className={`mb-8 shadow-md max-w-[1100px]`}>
       <div
         className={`p-2 font-semibold cursor-pointer
-        border-l-2 border-r-2 border-t-2
+        border-l-2 border-r-2 border-t-2 
         ${!cardExpanded && "border-b-2"}
         ${
           dark
-            ? "text-gray-300 bg-gray-700 bg-opacity-10 border-gray-600"
+            ? "text-gray-300 bg-gray-700 bg-opacity-10 border-gray-900"
             : "text-gray-500 border-gray-300"
         }
       `}
@@ -55,7 +55,7 @@ const VerseCard = (props) => {
           className={`flex flex-wrap p-1 ring-2 ring-inset
           ${
             dark
-              ? "bg-gray-700 bg-opacity-80 text-gray-200 ring-gray-600"
+              ? "bg-gray-700 bg-opacity-80 text-gray-200 ring-gray-900"
               : "bg-white text-gray-700 ring-gray-300"
           }
           `}

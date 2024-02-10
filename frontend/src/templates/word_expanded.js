@@ -17,6 +17,7 @@ import {
   setLexnGreekLastVisited,
 } from "../redux/actions/word"
 import Carousel from "../components/Carousel"
+import { SEO } from "../components/seo"
 
 export const query = graphql`
   query ($lexnId: String!) {
@@ -384,10 +385,12 @@ const Word = (props) => {
                 <div
                   className={`min-h-screen flex justify-center items-start mx-4 mt-6 pb-24`}
                 >
-                  <div className={`grid grid-cols-2 gap-y-4 gap-x-8 text-lg`}>
+                  <div
+                    className={`grid grid-cols-2 gap-y-4 gap-x-4 text-sm md:text-lg`}
+                  >
                     <div className={`flex justify-end items-start`}>
                       <div
-                        className={`text-right font-bold border-b-[1px] border-gray-500`}
+                        className={`text-right font-mono border-b-[1px] border-gray-500`}
                       >
                         Greek:
                       </div>
@@ -399,7 +402,7 @@ const Word = (props) => {
                     </div>
                     <div className={`flex justify-end items-start`}>
                       <div
-                        className={`text-right font-bold border-b-[1px] border-gray-500`}
+                        className={`text-right font-mono border-b-[1px] border-gray-500`}
                       >
                         Transliteration:
                       </div>
@@ -411,7 +414,7 @@ const Word = (props) => {
                     </div>
                     <div className={`flex justify-end items-start`}>
                       <div
-                        className={`text-right font-bold border-b-[1px] border-gray-500`}
+                        className={`text-right font-mono border-b-[1px] border-gray-500`}
                       >
                         Function:
                       </div>
@@ -423,7 +426,7 @@ const Word = (props) => {
                     </div>
                     <div className={`flex justify-end items-start`}>
                       <div
-                        className={`text-right font-bold border-b-[1px] border-gray-500`}
+                        className={`text-right font-mono border-b-[1px] border-gray-500`}
                       >
                         Gloss:
                       </div>
@@ -435,7 +438,7 @@ const Word = (props) => {
                     </div>
                     <div className={`flex justify-end items-start`}>
                       <div
-                        className={`text-right font-bold border-b-[1px] border-gray-500`}
+                        className={`text-right font-mono border-b-[1px] border-gray-500`}
                       >
                         Translation:
                       </div>
@@ -447,7 +450,7 @@ const Word = (props) => {
                     </div>
                     <div className={`flex justify-end items-start`}>
                       <div
-                        className={`text-right font-bold border-b-[1px] border-gray-500`}
+                        className={`text-right font-mono border-b-[1px] border-gray-500`}
                       >
                         # in NT:
                       </div>
@@ -459,7 +462,7 @@ const Word = (props) => {
                     </div>
                     <div className={`flex justify-end items-start`}>
                       <div
-                        className={`text-right font-bold border-b-[1px] border-gray-500`}
+                        className={`text-right font-mono border-b-[1px] border-gray-500`}
                       >
                         ID:
                       </div>
@@ -487,6 +490,7 @@ const Word = (props) => {
                     className={`relative
                   px-3 py-6
                 ${dark ? "bg-gray-800" : "bg-gray-50 "}
+                ${verseClicked && "hidden"}
                 `}
                   >
                     <WordBarChart
@@ -497,7 +501,7 @@ const Word = (props) => {
                   </div>
 
                   {/* verses on bar click */}
-                  <div className="max-h-[50vh] overflow-y-scroll no-scrollbar">
+                  <div className="max-h-[70vh] overflow-y-scroll no-scrollbar">
                     {verseClicked ? (
                       <div className={`mx-2 mt-4`}>
                         <div
@@ -558,7 +562,11 @@ const Word = (props) => {
                               >
                                 {edge.node.wordGreek}
                               </div>
-                              <div className={`p-1 text-xs`}>
+                              <div
+                                className={`p-1 text-xs ${
+                                  dark ? "text-gray-400" : "text-gray-500"
+                                }`}
+                              >
                                 {edge.node.wordEnglish}
                               </div>
                             </div>
@@ -699,3 +707,5 @@ const Word = (props) => {
 }
 
 export default Word
+
+export const Head = () => <SEO title="GNT" />

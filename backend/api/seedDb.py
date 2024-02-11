@@ -15,4 +15,5 @@ pkl_to_db('book')
 pkl_to_db('chap')
 pkl_to_db('vers')
 pkl_to_db('pdgm')
-
+pkl_to_db('frlc')
+pkl_to_db('frlb')

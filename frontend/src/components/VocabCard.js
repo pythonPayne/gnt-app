@@ -1,8 +1,7 @@
-import { navigate } from "gatsby"
 import { useSelector } from "react-redux"
 import React, { useState } from "react"
 
-const VocabCard = ({ card }) => {
+const VocabCard = ({ card, n, N }) => {
   const [showingBack, setShowingBack] = useState(false)
   const dark = useSelector((state) => state.layout.dark)
 
@@ -47,9 +46,12 @@ const VocabCard = ({ card }) => {
             {card.lexnGreek.length !== card.lexnGreekLong.length &&
               card.lexnGreekLong}
           </div>
+          <div className="absolute top-2 left-2 text-gray-500">
+            {n} / {N}
+          </div>
           <div
             className={`absolute h-full w-full bg-gray-200
-          ${dark ? "bg-gray-500 text-white" : "bg-gray-200 text-gray-700"}`}
+          ${dark ? "bg-gray-500 text-white" : "bg-gray-300 text-gray-700"}`}
             style={backStyle}
           >
             <div className="absolute top-2 left-2">
@@ -58,12 +60,7 @@ const VocabCard = ({ card }) => {
               {card.lexnGreek.length !== card.lexnGreekLong.length &&
                 card.lexnGreekLong}
             </div>
-            <div
-              className="absolute top-2 right-2 z-50"
-              onClick={() => navigate(`/word-${card.lexnId}`)}
-            >
-              {card.lexnId}
-            </div>
+            <div className="absolute top-2 right-2 z-50">{card.lexnId}</div>
             <div className="absolute bottom-2 left-2">{card.lexnFunction}</div>
             <div className="absolute bottom-2 right-2">{card.lexnFreqNt}x</div>
             <div className="grid place-content-center h-full w-full text-center">

@@ -2,7 +2,7 @@ import graphene
 from graphene import relay
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
-from .models import Word, Pars, Lexn, Book, Chap, Vers, Pdgm
+from .models import Word, Pars, Lexn, Book, Chap, Vers, Pdgm, Frlc, Frlb
 
         
 class WordNode(DjangoObjectType):
@@ -22,6 +22,7 @@ class LexnNode(DjangoObjectType):
         model = Lexn
         filter_fields = {
             'lexn_id': ['exact', 'in'],
+            'lexn_freq_nt': ['gte','lte']            
         }
         interfaces = (relay.Node, )
 
@@ -69,7 +70,25 @@ class PdgmNode(DjangoObjectType):
             'pdgm_lexn': ['exact', 'in'],
             'pdgm_pars': ['exact', 'in'],
         }
-        interfaces = (relay.Node, )  
+        interfaces = (relay.Node, ) 
+
+class FrlcNode(DjangoObjectType):
+    class Meta:
+        model = Frlc
+        filter_fields = {
+            'frlc_lexn': ['exact', 'in'],  
+            'frlc_book_name_abbrev': ['exact', 'in'],
+            'frlc_chap_num': ['exact','in']          
+        }
+        interfaces = (relay.Node, )
+
+class FrlbNode(DjangoObjectType):
+    class Meta:
+        model = Frlb
+        filter_fields = {
+            'frlb_lexn': ['exact', 'in'],            
+        }
+        interfaces = (relay.Node, )       
 
                          
 class Query(graphene.ObjectType):    
@@ -80,6 +99,8 @@ class Query(graphene.ObjectType):
     allChaps = DjangoFilterConnectionField(ChapNode, max_limit=None)
     allVerss = DjangoFilterConnectionField(VersNode, max_limit=None)
     allPdgms = DjangoFilterConnectionField(PdgmNode, max_limit=None)
+    allFrlcs = DjangoFilterConnectionField(FrlcNode, max_limit=None)
+    allFrlbs = DjangoFilterConnectionField(FrlbNode, max_limit=None)
 
     
 

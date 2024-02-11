@@ -142,14 +142,14 @@ const Layout = (props) => {
               <div
                 className={`pl-4 text-md md:text-lg text-blue-500 border-b-2 border-gray-600 py-1 font-mono`}
               >
-                Beta
+                Learn
               </div>
               <div
                 className={`pl-6 pt-3 text-sm md:text-md cursor-pointer focus:outline-none text-gray-300 hover:text-white
                 `}
-                onClick={() => navigate("/search")}
+                onClick={() => navigate("/flash-cards")}
               >
-                Search
+                flash cards
               </div>
             </div>
           </div>

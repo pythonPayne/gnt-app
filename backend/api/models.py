@@ -56,6 +56,7 @@ class Lexn(models.Model):
     lexn_strongs = models.CharField(max_length=6)    
     lexn_function = models.CharField(max_length=5, blank=True, null=True)
     lexn_freq_nt = models.IntegerField(default=0)
+    lexn_chs = models.TextField(blank=True, null=True)
  
     def __str__(self):
         return f"{self.lexn_id} --- {self.lexn_greek}"
@@ -115,6 +116,22 @@ class Pdgm(models.Model):
 
     def __str__(self):
         return f"{self.pdgm_lexn} --- {self.pdgm_pars} --- {self.pdgm_greek}"
+    
+
+class Frlc(models.Model):    
+    frlc_id = models.CharField(max_length=9, primary_key=True)
+    frlc_book_name_abbrev = models.CharField(max_length=3)
+    frlc_chap_num = models.IntegerField()
+    frlc_count = models.IntegerField()
+    frlc_lexn = models.ForeignKey(
+        "Lexn", related_name="frlc", on_delete=models.CASCADE, blank=True, null=True)
+    
+class Frlb(models.Model):
+    frlb_id = models.CharField(max_length=7, primary_key=True)
+    frlb_book_name_abbrev = models.CharField(max_length=3)    
+    frlb_count = models.IntegerField()
+    frlb_lexn = models.ForeignKey(
+        "Lexn", related_name="frlb", on_delete=models.CASCADE, blank=True, null=True)    
 
 class Gnt(models.Model):
     word_id = models.CharField(max_length=8, primary_key=True)    

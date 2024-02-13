@@ -30,8 +30,12 @@ const ChapterMenu = () => {
     return (
       <div>
         <div
-          className={`cursor-pointer px-1 py-2 text-gray-300 font-mono text-sm hover:text-blue-500
-            ${sameBook ? "border-b border-gray-400" : "border-none"}`}
+          className={`cursor-pointer ml-8 mr-10 py-2 font-mono text-md md:text-md md:hover:text-blue-500 
+            ${
+              sameBook
+                ? "border-b border-gray-500 text-blue-500"
+                : "border-none text-gray-300"
+            }`}
           onClick={() => {
             if (sameBook) {
               setBookOpen("")

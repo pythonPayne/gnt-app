@@ -28,7 +28,7 @@ const VerseCard = (props) => {
     } else {
       setCardExpanded(props.open)
     }
-  }, [props])
+  }, [props.open])
 
   return (
     <div className={`mb-8 shadow-md max-w-[1100px]`}>

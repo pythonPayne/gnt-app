@@ -3,7 +3,28 @@ import { graphql, navigate } from "gatsby"
 import { useSelector, useDispatch } from "react-redux"
 import Layout from "../components/Layout"
 import VocabCard from "../components/VocabCard"
-import { toggleShowMenu, toggleShowSettings } from "../redux/actions/layout"
+import {
+  toggleShowChapterLinks,
+  toggleShowMenu,
+  toggleShowOtherLinks,
+  toggleShowSettings,
+} from "../redux/actions/layout"
+import {
+  setMinFreq,
+  setMaxFreq,
+  setBook,
+  setChapter,
+  setShowArt,
+  setShowConj,
+  setShowPron,
+  setShowPrep,
+  setShowVerbs,
+  setShowPart,
+  setShowNouns,
+  setShowAdj,
+  setShowAdv,
+  setSortVariable,
+} from "../redux/actions/flashCards"
 import { SEO } from "../components/seo"
 
 export const query = graphql`
@@ -30,24 +51,26 @@ export const query = graphql`
 `
 
 const FlashCards = (props) => {
+  const lexns = props.data.gnt.allLexns.edges
+  const [showSettings, setShowSettings] = useState(false)
+
   const dispatch = useDispatch()
   const dark = useSelector((state) => state.layout.dark)
   const showMenu = useSelector((state) => state.layout.showMenu)
-  const lexns = props.data.gnt.allLexns.edges
-  const [showSettings, setShowSettings] = useState(false)
-  const [minFreq, setMinFreq] = useState(100)
-  const [maxFreq, setMaxFreq] = useState(1000)
-  const [book, setBook] = useState("All Books")
-  const [chapter, setChapter] = useState(1)
-  const [showArt, setShowArt] = useState(true)
-  const [showConj, setShowConj] = useState(true)
-  const [showPron, setShowPron] = useState(true)
-  const [showPrep, setShowPrep] = useState(true)
-  const [showVerbs, setShowVerbs] = useState(true)
-  const [showPart, setShowPart] = useState(true)
-  const [showNouns, setShowNouns] = useState(true)
-  const [showAdj, setShowAdj] = useState(true)
-  const [showAdv, setShowAdv] = useState(true)
+  const minFreq = useSelector((state) => state.flashCards.minFreq)
+  const maxFreq = useSelector((state) => state.flashCards.maxFreq)
+  const book = useSelector((state) => state.flashCards.book)
+  const chapter = useSelector((state) => state.flashCards.chapter)
+  const showArt = useSelector((state) => state.flashCards.showArt)
+  const showConj = useSelector((state) => state.flashCards.showConj)
+  const showPron = useSelector((state) => state.flashCards.showPron)
+  const showPrep = useSelector((state) => state.flashCards.showPrep)
+  const showVerbs = useSelector((state) => state.flashCards.showVerbs)
+  const showPart = useSelector((state) => state.flashCards.showPart)
+  const showNouns = useSelector((state) => state.flashCards.showNouns)
+  const showAdj = useSelector((state) => state.flashCards.showAdj)
+  const showAdv = useSelector((state) => state.flashCards.showAdv)
+  const sortVariable = useSelector((state) => state.flashCards.sortVariable)
   const [toggledAllFunctions, setToggledAllFunctions] = useState(true)
 
   const books = [
@@ -95,33 +118,43 @@ const FlashCards = (props) => {
   useEffect(() => {
     dispatch(toggleShowMenu(false))
     dispatch(toggleShowSettings(true))
+    dispatch(toggleShowChapterLinks(false))
+    dispatch(toggleShowOtherLinks(false))
   }, [])
 
-  const lexnsF = lexns.filter(
-    (edge) =>
-      (edge.node.lexnChs
-        .toLocaleLowerCase()
-        .includes((book + "_" + chapter).toLocaleLowerCase()) ||
-        book === "All Books") &&
-      parseInt(edge.node.lexnFreqNt) > minFreq &&
-      parseInt(edge.node.lexnFreqNt) < maxFreq &&
-      functionsF.includes(edge.node.lexnFunction)
-  )
+  const lexnsF = lexns
+    .filter(
+      (edge) =>
+        (edge.node.lexnChs
+          .toLocaleLowerCase()
+          .includes((book + "_" + chapter).toLocaleLowerCase()) ||
+          (chapter === "All Chs" &&
+            edge.node.lexnChs
+              .toLocaleLowerCase()
+              .includes((book + "_").toLocaleLowerCase())) ||
+          book === "All Books") &&
+        parseInt(edge.node.lexnFreqNt) >= minFreq &&
+        parseInt(edge.node.lexnFreqNt) <= maxFreq &&
+        functionsF.includes(edge.node.lexnFunction)
+    )
+    .sort((a, b) => (a.node[sortVariable] > b.node[sortVariable] ? -1 : 1))
 
   const freqOptions = [1, 3, 5, 10, 25, 50, 75, 100, 200, 500, 1000, 20000]
 
   const functionToggle = (label, setter, value) => (
     <>
-      <div className="flex items-center justify-center font-mono">{label}</div>
+      <div className="flex items-center justify-end font-mono pr-12 text-sm md:text-md">
+        {label}
+      </div>
       <div className="flex w-full justify-center ">
         <div
-          onClick={() => setter(!value)}
+          onClick={() => dispatch(setter(!value))}
           className={`w-[24%] cursor-pointer transition-all duration-700  ${
             value ? "bg-blue-500" : "bg-gray-300"
           }`}
         ></div>
         <div
-          onClick={() => setter(!value)}
+          onClick={() => dispatch(setter(!value))}
           className={`w-[24%] cursor-pointer transition-all duration-700  ${
             !value ? "bg-gray-500" : "bg-gray-300"
           }`}
@@ -131,60 +164,46 @@ const FlashCards = (props) => {
   )
 
   const setAllFunctions = (bool) => {
-    setShowArt(bool)
-    setShowConj(bool)
-    setShowPron(bool)
-    setShowPrep(bool)
-    setShowVerbs(bool)
-    setShowPart(bool)
-    setShowNouns(bool)
-    setShowAdj(bool)
-    setShowAdv(bool)
+    dispatch(setShowArt(bool))
+    dispatch(setShowConj(bool))
+    dispatch(setShowPron(bool))
+    dispatch(setShowPrep(bool))
+    dispatch(setShowVerbs(bool))
+    dispatch(setShowPart(bool))
+    dispatch(setShowNouns(bool))
+    dispatch(setShowAdj(bool))
+    dispatch(setShowAdv(bool))
     setToggledAllFunctions(bool)
   }
 
   return (
     <Layout>
       <div
-        className={`w-screen min-h-screen flex flex-col items-center justify-center text-xs md:text-sm pb-64
+        className={`w-full min-h-screen flex flex-col items-center justify-center text-sm md:text-md pb-64
         ${dark ? "bg-gray-800" : "bg-gray-50"}`}
       >
         {/* side menu button (left) */}
-        <div className={`flex fixed bottom-7 left-7 z-40`}>
-          {!showSettings ? (
+        <div
+          className={`flex fixed bottom-5 left-5 z-40 ${
+            showMenu && "invisible"
+          }`}
+        >
+          {!showSettings && (
             <svg
               xmlns="http://www.w3.org/2000/svg"
               viewBox="0 0 24 24"
-              className={`h-16 w-12 animate-spin-slow cursor-pointer flex justify-center items-center pb-[5px]
+              className={`h-[4.30rem] w-[4.30rem] cursor-pointer rounded-full pt-3 px-2 pb-2 
               ${
                 dark
-                  ? "fill-gray-900 stroke-gray-500 hover:stroke-blue-500"
-                  : "fill-gray-100 stroke-gray-500 hover:stroke-gray-900"
+                  ? "fill-gray-800 bg-gray-800 bg-opacity-50 stroke-white border-[3px]  border-gray-900 md:hover:fill-gray-700"
+                  : "fill-gray-100 bg-gray-50 stroke-gray-700 border-[3px] border-gray-300 md:hover:stroke-gray-900"
               }`}
               onClick={() => setShowSettings(!showSettings)}
             >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
-              />
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-              />
-            </svg>
-          ) : (
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 24 24"
-              className={`h-16 w-12 stroke-gray-500 fill-gray-500 hover:fill-gray-200 stroke-0 pl-2 pt-2 cursor-pointer text-center pb-[5px]`}
-              onClick={() => setShowSettings(!showSettings)}
-            >
-              <path
-                fillRule="evenodd"
-                d="M15.707 15.707a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 010 1.414zm-6 0a1 1 0 01-1.414 0l-5-5a1 1 0 010-1.414l5-5a1 1 0 011.414 1.414L5.414 10l4.293 4.293a1 1 0 010 1.414z"
-                clipRule="evenodd"
+                d="M12 3c2.755 0 5.455.232 8.083.678.533.09.917.556.917 1.096v1.044a2.25 2.25 0 0 1-.659 1.591l-5.432 5.432a2.25 2.25 0 0 0-.659 1.591v2.927a2.25 2.25 0 0 1-1.244 2.013L9.75 21v-6.568a2.25 2.25 0 0 0-.659-1.591L3.659 7.409A2.25 2.25 0 0 1 3 5.818V4.774c0-.54.384-1.006.917-1.096A48.32 48.32 0 0 1 12 3Z"
               />
             </svg>
           )}
@@ -194,51 +213,70 @@ const FlashCards = (props) => {
         <div
           className={`fixed top-0 left-0 min-h-screen z-30 overflow-auto max-w-[400px] no-scrollbar
               ${dark ? "bg-gray-900" : "bg-gray-900"}
-              ${showSettings ? "w-[100vw]" : "w-0"}
+              ${showSettings ? "w-full" : "w-0"}
               `}
         >
           {showSettings && (
             <>
               <div className={`relative`}>
                 <div className={`absolute pb-[50vh] w-full`}>
-                  <div
-                    className={`pl-4 text-md md:text-lg bg-black text-blue-500 border-b-2 border-gray-600 py-4 font-mono`}
-                  >
-                    Flash Card Filters
+                  <div className="sticky top-0 flex w-full justify-between items-center px-4 border-b-2 border-gray-600 py-4 mb-4 bg-black ">
+                    <div
+                      className={`text-lg md:text-lg text-blue-500 font-mono`}
+                    >
+                      Flash Card Filters
+                    </div>
+                    <svg
+                      onClick={() => setShowSettings(!showSettings)}
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={2.5}
+                      className="w-6 h-6 stroke-white md:hover:stroke-blue-500 cursor-pointer"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M6 18 18 6M6 6l12 12"
+                      />
+                    </svg>
                   </div>
+
                   <div
-                    className={`grid grid-cols-2 px-4 pt-4 gap-y-3 gap-x-2 ${
+                    className={`grid grid-cols-2 pl-4 pt-4 gap-y-3 gap-x-2 pr-16 text-lg ${
                       dark ? "text-gray-200" : "text-gray-200"
                     }`}
                   >
-                    <div className="flex items-center justify-center font-mono">
+                    <div className="flex items-center justify-end pr-12 font-mono">
                       Book
                     </div>
                     <select
-                      className={`cursor-pointer bg-gray-900 appearance-none border-b border-gray-600 py-1 px-1 text-center ${
+                      className={`cursor-pointer bg-gray-900 appearance-none border-b border-gray-600 py-1 mx-5 ${
                         dark ? "bg-gray-900" : "bg-gray-900 "
                       }`}
+                      style={{ textAlignLast: "center" }}
                       value={book}
                       onChange={(e) => {
-                        setBook(e.target.value)
-                        setChapter(1)
+                        dispatch(setBook(e.target.value))
+                        dispatch(setChapter(1))
                       }}
                     >
                       {books.map((book, i) => (
                         <option key={i}>{book.bookNameAbbrev}</option>
                       ))}
                     </select>
-                    <div className="flex items-center justify-center font-mono">
+                    <div className="flex items-center justify-end pr-12 font-mono">
                       Chap
                     </div>
-
                     <select
-                      className={`cursor-pointer bg-gray-900 appearance-none border-b border-gray-600 py-1 px-1 text-center
+                      className={`cursor-pointer bg-gray-900 appearance-none border-b border-gray-600 py-1 mx-5 text-center
                       ${book === "All Books" && "invisible"}
                       `}
+                      style={{ textAlignLast: "center" }}
                       value={chapter}
-                      onChange={(e) => setChapter(e.target.value)}
+                      onChange={(e) => dispatch(setChapter(e.target.value))}
                     >
+                      <option key={"all-chs"}>All Chs</option>
                       {[
                         ...Array(
                           books.filter((bk) => bk.bookNameAbbrev === book)[0][
@@ -249,57 +287,72 @@ const FlashCards = (props) => {
                         <option key={n}>{n + 1}</option>
                       ))}
                     </select>
-
-                    <div className="flex items-center justify-center font-mono">
+                    <div className="flex items-center justify-end pr-12 font-mono">
                       Freq
                     </div>
-                    <div className="grid grid-cols-12 text-xs">
+                    <div className="grid grid-cols-12">
                       <select
-                        className="cursor-pointer col-span-5 bg-gray-900 appearance-none border-b border-gray-600 py-1 px-1 text-center"
+                        className="cursor-pointer col-span-5 bg-gray-900 appearance-none  py-1 px-1 text-center"
+                        style={{ textAlignLast: "center" }}
                         value={minFreq}
-                        onChange={(e) => setMinFreq(e.target.value)}
+                        onChange={(e) => dispatch(setMinFreq(e.target.value))}
                       >
                         {freqOptions.map((n) => (
-                          <option key={n}>{n}</option>
+                          <option value={n} key={n}>
+                            {n >= 1000 ? n / 1000 + "k" : n}
+                          </option>
                         ))}
                       </select>
-                      <div className="col-span-2 flex items-center justify-center">
-                        -
+                      <div className="col-span-2 flex items-center justify-center text-gray-300 text-md">
+                        to
                       </div>
                       <select
-                        className="cursor-pointer col-span-5 bg-gray-900 appearance-none border-b border-gray-600 py-1 px-1 text-center"
+                        className="cursor-pointer col-span-5 bg-gray-900 appearance-none  py-1 px-1 text-center"
+                        style={{ textAlignLast: "center" }}
                         value={maxFreq}
-                        onChange={(e) => setMaxFreq(e.target.value)}
+                        onChange={(e) => dispatch(setMaxFreq(e.target.value))}
                         dir="center"
                       >
                         {freqOptions
-                          .filter((n) => n > minFreq)
+                          .filter((n) => n >= minFreq)
                           .map((n) => (
-                            <option key={n}>{n}</option>
+                            <option value={n} key={n}>
+                              {n >= 1000 ? n / 1000 + "k" : n}
+                            </option>
                           ))}
                       </select>
                     </div>
-                    <div></div>
-                    <div
-                      className="pt-4 font-mono text-center cursor-pointer"
-                      onClick={() => setAllFunctions(!toggledAllFunctions)}
-                    >
-                      toggle all
-                    </div>
+                  </div>
+                  <div className="h-[1px] my-8 bg-gray-500 w-full"></div>
+                  <div
+                    className={`grid grid-cols-2 pl-4 gap-y-3 gap-x-2 pr-16 text-lg text-gray-200`}
+                  >
                     {functionToggle("nouns", setShowNouns, showNouns)}
                     {functionToggle("verbs", setShowVerbs, showVerbs)}
                     {functionToggle("adj", setShowAdj, showAdj)}
                     {functionToggle("adv", setShowAdv, showAdv)}
-                    {functionToggle("prep", setShowAdv, showAdv)}
+                    {functionToggle("prep", setShowPrep, showPrep)}
                     {functionToggle("pron", setShowPron, showPron)}
                     {functionToggle("art", setShowArt, showArt)}
                     {functionToggle("conj", setShowConj, showConj)}
                     {functionToggle("part", setShowPart, showPart)}
+                    <div></div>
+                    <div
+                      className="font-mono text-center cursor-pointer text-sm italic text-gray-200 mt-2 md:hover:text-white"
+                      onClick={() => setAllFunctions(!toggledAllFunctions)}
+                    >
+                      toggle all
+                    </div>
+                  </div>
+
+                  <div className="h-[1px] my-8 bg-gray-500 w-full"></div>
+                  <div className="flex justify-center text-white text-xs ">
+                    sorting & other options to come...
                   </div>
                 </div>
               </div>
               <div
-                className={`fixed bottom-0 h-24 z-10 w-[100vw] max-w-[400px]
+                className={`fixed bottom-0 h-24 z-10 max-w-[400px]
               ${dark ? "bg-gray-900" : "bg-gray-900"}
               `}
               ></div>
@@ -308,7 +361,7 @@ const FlashCards = (props) => {
         </div>
 
         <div
-          className={`py-4 font-mono ${
+          className={`py-6 font-mono ${
             dark ? "text-gray-300" : "text-gray-800"
           }`}
         >
@@ -316,7 +369,7 @@ const FlashCards = (props) => {
         </div>
         <div>
           {lexnsF.slice(0, 1000).map((edge, n) => (
-            <div key={n} className="mb-8">
+            <div key={n} className="mb-12">
               <VocabCard card={edge.node} n={n + 1} N={lexnsF.length} />
             </div>
           ))}

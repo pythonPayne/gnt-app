@@ -9,6 +9,8 @@ import {
   toggleShowMenu,
   toggleShowSettings,
   setTemplate,
+  toggleShowChapterLinks,
+  toggleShowOtherLinks,
 } from "../redux/actions/layout"
 
 export const query = graphql`
@@ -63,6 +65,7 @@ export const query = graphql`
 
 const Chapter = (props) => {
   const dispatch = useDispatch()
+  const showMenu = useSelector((state) => state.layout.showMenu)
   const expandAllVerses = useSelector(
     (state) => state.verseCard.expandAllVerses
   )
@@ -83,6 +86,8 @@ const Chapter = (props) => {
     dispatch(setTemplate("chapter"))
     dispatch(toggleShowMenu(false))
     dispatch(toggleShowSettings(true))
+    dispatch(toggleShowChapterLinks(false))
+    dispatch(toggleShowOtherLinks(false))
   }, [])
 
   const chap = data.gnt.allChaps.edges[0].node
@@ -97,7 +102,13 @@ const Chapter = (props) => {
       >
         <div className={`w-screen max-w-[1100px]`}>
           <div
-            className={`flex items-center justify-center h-[12vh] text-3xl tracking-wide mb-2 font-mono
+            onClick={() => {
+              dispatch(toggleShowMenu(!showMenu))
+              dispatch(toggleShowChapterLinks(true))
+              dispatch(toggleShowOtherLinks(false))
+              dispatch(toggleShowSettings(false))
+            }}
+            className={`cursor-pointer flex items-center justify-center h-[12vh] text-3xl tracking-wide mb-2 font-mono md:hover:text-white
             ${dark ? "text-gray-300" : "text-gray-500"}
             `}
           >
@@ -105,7 +116,7 @@ const Chapter = (props) => {
           </div>
 
           {/* VERSES */}
-          <div className={`mx-2 ${!expandAllVerses && "w-[95vw] lg:w-[85vw]"}`}>
+          <div className={`mx-2`}>
             {verses.map((verse, key) => (
               <div
                 key={key}

@@ -143,7 +143,7 @@ const FlashCards = (props) => {
 
   const functionToggle = (label, setter, value) => (
     <>
-      <div className="flex items-center justify-end font-mono pr-12 text-sm md:text-md">
+      <div className="flex items-center justify-end font-sans pr-12 text-sm md:text-md">
         {label}
       </div>
       <div className="flex w-full justify-center ">
@@ -222,7 +222,7 @@ const FlashCards = (props) => {
                 <div className={`absolute pb-[50vh] w-full`}>
                   <div className="sticky top-0 flex w-full justify-between items-center px-4 border-b-2 border-gray-600 py-4 mb-4 bg-black ">
                     <div
-                      className={`text-lg md:text-lg text-blue-500 font-mono`}
+                      className={`text-lg md:text-xl text-blue-500 font-sans`}
                     >
                       Flash Card Filters
                     </div>
@@ -243,11 +243,11 @@ const FlashCards = (props) => {
                   </div>
 
                   <div
-                    className={`grid grid-cols-2 pl-4 pt-4 gap-y-3 gap-x-2 pr-16 text-lg ${
+                    className={`grid grid-cols-2 pl-4 pt-4 gap-y-3 gap-x-2 pr-16 text-md md:text-lg ${
                       dark ? "text-gray-200" : "text-gray-200"
                     }`}
                   >
-                    <div className="flex items-center justify-end pr-12 font-mono">
+                    <div className="flex items-center justify-end pr-12 font-sans">
                       Book
                     </div>
                     <select
@@ -265,7 +265,7 @@ const FlashCards = (props) => {
                         <option key={i}>{book.bookNameAbbrev}</option>
                       ))}
                     </select>
-                    <div className="flex items-center justify-end pr-12 font-mono">
+                    <div className="flex items-center justify-end pr-12 font-sans">
                       Chap
                     </div>
                     <select
@@ -287,7 +287,7 @@ const FlashCards = (props) => {
                         <option key={n}>{n + 1}</option>
                       ))}
                     </select>
-                    <div className="flex items-center justify-end pr-12 font-mono">
+                    <div className="flex items-center justify-end pr-12 font-sans">
                       Freq
                     </div>
                     <div className="grid grid-cols-12">
@@ -338,7 +338,7 @@ const FlashCards = (props) => {
                     {functionToggle("part", setShowPart, showPart)}
                     <div></div>
                     <div
-                      className="font-mono text-center cursor-pointer text-sm italic text-gray-200 mt-2 md:hover:text-white"
+                      className="font-sans text-center cursor-pointer text-sm italic text-gray-200 mt-2 md:hover:text-white"
                       onClick={() => setAllFunctions(!toggledAllFunctions)}
                     >
                       toggle all
@@ -346,8 +346,8 @@ const FlashCards = (props) => {
                   </div>
 
                   <div className="h-[1px] my-8 bg-gray-500 w-full"></div>
-                  <div className="flex justify-center text-white text-xs ">
-                    sorting & other options to come...
+                  <div className="flex justify-center text-red-400 text-xs ">
+                    more to come...
                   </div>
                 </div>
               </div>
@@ -361,7 +361,7 @@ const FlashCards = (props) => {
         </div>
 
         <div
-          className={`py-6 font-mono ${
+          className={`py-6 font-sans ${
             dark ? "text-gray-300" : "text-gray-800"
           }`}
         >

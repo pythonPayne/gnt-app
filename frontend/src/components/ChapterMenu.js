@@ -30,7 +30,7 @@ const ChapterMenu = () => {
     return (
       <div>
         <div
-          className={`cursor-pointer ml-8 mr-10 py-2 font-mono text-md md:text-md md:hover:text-blue-500 
+          className={`cursor-pointer ml-8 mr-10 py-2 font-sans text-md md:text-lg md:hover:text-blue-500 
             ${
               sameBook
                 ? "border-b border-gray-500 text-blue-500"

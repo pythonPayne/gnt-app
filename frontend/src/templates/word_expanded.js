@@ -158,7 +158,6 @@ const Word = (props) => {
   useEffect(() => {
     dispatch(setTemplate("word"))
     dispatch(toggleShowMenu(false))
-    dispatch(toggleExpandAllVerses(false))
   }, [])
 
   useEffect(() => {

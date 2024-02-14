@@ -44,7 +44,7 @@ const Layout = (props) => {
   const settingsItem = (showVar, toggleShowVar, displayText) => {
     return (
       <div
-        className={`pl-6 text-md md:text-md cursor-pointer font-mono ${
+        className={`pl-6 text-md md:text-lg cursor-pointer font-sans ${
           showVar ? "text-red-300" : "text-gray-600"
         }`}
         onClick={() => dispatch(toggleShowVar(!showVar))}
@@ -99,7 +99,7 @@ const Layout = (props) => {
                 <div className={`absolute pb-64 w-full`}>
                   <div className="sticky top-0 flex w-full justify-between items-center px-4 border-b-2 border-gray-600 py-4 mb-4 bg-black ">
                     <div
-                      className={`text-lg md:text-lg text-blue-500 font-mono`}
+                      className={`text-lg md:text-xl text-blue-500 font-sans`}
                     >
                       Verse Settings
                     </div>
@@ -124,12 +124,12 @@ const Layout = (props) => {
                   </div>
 
                   <div
-                    className={`pl-4 text-lg md:text-lg text-blue-500 bg-black border-y-2 border-gray-600 py-4 font-mono sticky top-0`}
+                    className={`pl-4 text-lg md:text-xl text-blue-500 bg-black border-y-2 border-gray-600 py-4 font-sans sticky top-0`}
                   >
                     Display Settings
                   </div>
                   <div
-                    className={`pl-6 pt-3 pb-9 text-md md:text-md cursor-pointer font-mono focus:outline-none
+                    className={`pl-6 pt-3 pb-9 text-md md:text-lg cursor-pointer font-sans focus:outline-none
                 ${dark ? "text-red-300" : "text-gray-600"}
                 `}
                     onClick={() => dispatch(setDark(!dark))}
@@ -144,7 +144,7 @@ const Layout = (props) => {
                 <div className={`absolute pb-[50vh] w-full`}>
                   <div className="sticky top-0 flex w-full justify-between items-center px-4 border-b-2 border-gray-600 py-4 mb-4 bg-black ">
                     <div
-                      className={`text-lg md:text-lg text-blue-500 font-mono`}
+                      className={`text-lg md:text-lg text-blue-500 font-sans`}
                     >
                       Greek NT
                     </div>
@@ -158,7 +158,7 @@ const Layout = (props) => {
                 <div className={`absolute pb-[50vh] w-full`}>
                   <div className="sticky top-0 flex w-full justify-between items-center px-4 border-b-2 border-gray-600 py-4 mb-4 bg-black ">
                     <div
-                      className={`text-lg md:text-lg text-blue-500 font-mono`}
+                      className={`text-lg md:text-lg text-blue-500 font-sans`}
                     >
                       Learning
                     </div>
@@ -177,7 +177,7 @@ const Layout = (props) => {
                     </svg>
 
                     <div
-                      className={`text-md md:text-md cursor-pointer focus:outline-none text-gray-300 hover:text-white
+                      className={`text-md md:text-lg cursor-pointer focus:outline-none text-gray-300 hover:text-white
                 `}
                       onClick={() => navigate("/flash-cards")}
                     >
@@ -185,7 +185,7 @@ const Layout = (props) => {
                     </div>
                   </div>
                   <div className="pl-11 pt-4 text-red-400 italic text-xs">
-                    more coming soon...
+                    more to come...
                   </div>
                 </div>
               </div>

@@ -260,14 +260,29 @@ const Word = (props) => {
         >
           <div className={`w-screen max-w-[1100px]`}>
             {/* word banner */}
-            <div className="">
-              <div
-                className={`flex justify-center items-center h-[12vh] text-3xl
-                ${dark ? "text-gray-300" : "text-gray-500"}
-                `}
-              >
-                {lexn.lexnGreek}
+            <div
+              className={`flex w-full justify-between items-center h-[12vh] px-4 ${
+                dark ? "text-gray-300" : "text-gray-500"
+              }`}
+            >
+              <div className={`cursor-pointer`} onClick={() => navigate(-1)}>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="w-6 h-6"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+                  />
+                </svg>
               </div>
+              <div className={`text-3xl`}>{lexn.lexnGreek}</div>
+              <div>{""}</div>
             </div>
 
             {/* horizontal menu */}

@@ -79,6 +79,9 @@ class Chap(models.Model):
     chap_num_verses = models.IntegerField()
     chap_num_words = models.IntegerField()
     chap_num = models.IntegerField()
+    chap_url = models.CharField(max_length=6)
+    chap_url_prev = models.CharField(max_length=6)
+    chap_url_next = models.CharField(max_length=6)        
     chap_book = models.ForeignKey(
         "Book", related_name="chap", on_delete=models.CASCADE, blank=True, null=True)        
 

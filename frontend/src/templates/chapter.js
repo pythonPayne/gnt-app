@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { graphql } from "gatsby"
+import { graphql, Link } from "gatsby"
 import { useSelector, useDispatch } from "react-redux"
 import VerseCard from "../components/VerseCard"
 import Layout from "../components/Layout"
@@ -23,6 +23,9 @@ export const query = graphql`
               bookName
             }
             chapId
+            chapUrl
+            chapUrlPrev
+            chapUrlNext
             vers {
               edges {
                 node {
@@ -92,6 +95,7 @@ const Chapter = (props) => {
 
   const chap = data.gnt.allChaps.edges[0].node
   const verses = chap.vers.edges
+  const chapUrlPrev = chap.chapUrlPrev
 
   return (
     <Layout>
@@ -102,17 +106,55 @@ const Chapter = (props) => {
       >
         <div className={`w-screen max-w-[1100px]`}>
           <div
-            onClick={() => {
-              dispatch(toggleShowMenu(!showMenu))
-              dispatch(toggleShowChapterLinks(true))
-              dispatch(toggleShowOtherLinks(false))
-              dispatch(toggleShowSettings(false))
-            }}
-            className={`cursor-pointer flex items-center justify-center h-[12vh] text-3xl tracking-wide mb-2 font-mono md:hover:text-white
-            ${dark ? "text-gray-300" : "text-gray-500"}
+            className={`flex items-center justify-between h-[12vh] mb-2 px-4 ${
+              dark ? "text-gray-300" : "text-gray-500"
+            }
             `}
           >
-            {chap.chapBook.bookName} {parseInt(chap.chapId.slice(2, 4))}
+            <Link className={`cursor-pointer`} to={`/${chap.chapUrlPrev}`}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+                />
+              </svg>
+            </Link>
+            <div
+              className={`cursor-pointer text-xl font-sans tracking-wider md:hover:text-white       
+            `}
+              onClick={() => {
+                dispatch(toggleShowMenu(!showMenu))
+                dispatch(toggleShowChapterLinks(true))
+                dispatch(toggleShowOtherLinks(false))
+                dispatch(toggleShowSettings(false))
+              }}
+            >
+              {chap.chapBook.bookName} {parseInt(chap.chapId.slice(2, 4))}
+            </div>
+            <Link className={`cursor-pointer`} to={`/${chap.chapUrlNext}`}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
+                />
+              </svg>
+            </Link>
           </div>
 
           {/* VERSES */}
@@ -130,6 +172,52 @@ const Chapter = (props) => {
                 />
               </div>
             ))}
+          </div>
+
+          <div
+            className={`flex items-center justify-between h-[12vh] mb-2 px-4 ${
+              dark ? "text-gray-300" : "text-gray-500"
+            }
+            `}
+          >
+            <Link className={`cursor-pointer`} to={`/${chap.chapUrlPrev}`}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M10.5 19.5 3 12m0 0 7.5-7.5M3 12h18"
+                />
+              </svg>
+            </Link>
+            <div
+              className={`cursor-pointer text-3xl font-sans tracking-wider
+            `}
+            >
+              {""}
+            </div>
+            <Link className={`cursor-pointer`} to={`/${chap.chapUrlNext}`}>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className="w-6 h-6"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"
+                />
+              </svg>
+            </Link>
           </div>
 
           <div className={`min-h-[30vh]`}></div>

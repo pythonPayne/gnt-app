@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { graphql, navigate } from "gatsby"
+import { graphql } from "gatsby"
 import { useSelector, useDispatch } from "react-redux"
 import Layout from "../components/Layout"
 import VocabCard from "../components/VocabCard"
